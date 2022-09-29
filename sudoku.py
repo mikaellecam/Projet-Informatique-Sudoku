@@ -1,8 +1,11 @@
-from math import sqrt
+import random
 from fonctions import verifier_bloc,verifier_ligne,verify_column
 
 #N = int(input("Taille de grille: "))
 grille = [[1,4,3,2],[3,1,1,4],[4,1,2,3],[2,3,4,1]]
+
+def generationgrille(N):
+    pass
 
 def afficher(G):
     affichage = "------------------"
