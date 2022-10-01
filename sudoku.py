@@ -1,11 +1,10 @@
 from fonctions import verifier_bloc,verifier_ligne,verify_column,est_complete
+import random
 
 # N = int(input("Taille de grille: "))
 grille = [[1,4,3,2], [3,2,0,4], [4,1,2,3], [2,3,4,1]]
 grille_test_aresoudre = [[0,1,0,0], [0,4,0,0], [0,0,0,0], [1,0,0,4]]
 
-def generationgrille(N):
-    pass
 
 def afficher(G):
     affichage = "------------------"
@@ -31,6 +30,23 @@ def verification(G):
             return False"""
     return True
 # print(verification(grille))
+
+def generationgrille(N):
+    nb = random.randint(abs(N//3 - 1), N//3) # on ne rempli qu'a peu près 1/3 de la grille au préalable (difficulté)
+    grid = [[0]*N for _ in range(N)] # ambiguité de python on ne peut pas écrire [[0]*N]*N (a cause de la mutabilitée)
+    i = 0
+    while i < nb:
+        x, y = (random.randint(0, N-1), random.randint(0, N-1))
+        #print(x,y, grid[x][y], i)
+        if grid[x][y] == 0:
+            i += 1
+            print(i)
+            grid[x][y] = random.randint(0, N)
+    if not verification(grid):
+        return generationgrille(N)
+    return grid
+
+#print(generationgrille(4))
 
 def resolution(G):
     verif = verification(G)
