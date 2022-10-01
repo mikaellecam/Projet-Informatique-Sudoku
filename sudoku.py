@@ -32,7 +32,7 @@ def verification(G):
 # print(verification(grille))
 
 def generationgrille(N):
-    nb = random.randint(abs(N//3 - 1), N//3) # on ne rempli qu'a peu près 1/3 de la grille au préalable (difficulté)
+    nb = random.randint(abs((N**2)//3 - 1), (N**2)//3) # on ne rempli qu'a peu près 1/3 de la grille au préalable (difficulté)
     grid = [[0]*N for _ in range(N)] # ambiguité de python on ne peut pas écrire [[0]*N]*N (a cause de la mutabilitée)
     i = 0
     while i < nb:
@@ -40,7 +40,6 @@ def generationgrille(N):
         #print(x,y, grid[x][y], i)
         if grid[x][y] == 0:
             i += 1
-            print(i)
             grid[x][y] = random.randint(0, N)
     if not verification(grid):
         return generationgrille(N)
@@ -66,4 +65,4 @@ def resolution(G):
 
 
 # print(resolution(grille))
-print(resolution(grille_test_aresoudre))
+#print(resolution(grille_test_aresoudre))
