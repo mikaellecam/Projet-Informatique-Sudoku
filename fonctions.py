@@ -3,6 +3,11 @@ import random
 
 
 def afficher(G):
+    """
+    fonction qui permet d'afficher de manière propre une grille de sudoku
+    :param G: la grille à afficher
+    :return: None
+    """
     if G is None:
         print("None")
         return
@@ -16,6 +21,12 @@ def afficher(G):
 
 
 def verifier_bloc(G,i):
+    """
+    fonction qui vérifie qu'un bloc donné respecte bien les règles du sudoku
+    :param G: la grille utilisée
+    :param i: indice du bloc(numéro en partant d'en haut a gauche vers en bas à droite)
+    :return: bool
+    """
     x,y = (i//sqrt(len(G))*sqrt(len(G))),(i%sqrt(len(G))*sqrt(len(G)))
     coords = [(x+i,y+j) for j in range(int(sqrt(len(G)))) for i in range(int(sqrt(len(G))))]
     l = []
@@ -30,6 +41,12 @@ def verifier_bloc(G,i):
 
 
 def verifier_ligne(G,i):
+    """
+    fonction qui vérifie si la ligne d'indice i respecte les règles du sudoku
+    :param G: la grille utilisée
+    :param i: l'indice de la ligne
+    :return: bool
+    """
     l = []
     for x in G[i]:
         if 0<x<=4:
@@ -41,6 +58,12 @@ def verifier_ligne(G,i):
 
 
 def verify_column(G,j):
+    """
+    fonction qui vérifie qu'une colonne d'indice donné respecte les règles du sudoku
+    :param G: la grille utilisée
+    :param j: l'indice de la colonne
+    :return: bool
+    """
     l = []
     for i in range(len(G)):
         if 0< G[i][j] <= 4:
@@ -52,6 +75,11 @@ def verify_column(G,j):
 
 
 def est_complete(G):
+    """
+    fonction qui permet de vérifier si une grille de sudoku ne comporte aucune case vide
+    :param G: la grille à vérifier
+    :return: bool
+    """
     for k in range(len(G)):
         for i in range(len(G)):
             if G[k][i] == 0:
@@ -60,11 +88,22 @@ def est_complete(G):
 
 
 def afficherline(G,l):
+    """
+    fonction qui permet d'afficher une ligne d'indice donné
+    :param G: la grille utilisée
+    :param l: l'indice de la ligne
+    :return: None
+    """
     affichage = f"\n| {G[l][0]} | {G[l][1]} || {G[l][2]} | {G[l][3]} |"
-    return affichage
+    print(affichage)
 
 
 def verification(G):
+    """
+    fonction qui utilise toutes les autres fonction de vérification pour savoir si la grille est correcte
+    :param G: la grille à vérifier
+    :return: bool
+    """
     for k in range(len(G)):
         if not verifier_ligne(G, k):
             return False
@@ -76,6 +115,11 @@ def verification(G):
 
 
 def resolution(G):
+    """
+    fonction qui va résoudre la grille donnée en respectant les règles du sudoku
+    :param G: la grille (partiellement remplie) à résoudre
+    :return: la grille complétée(list)
+    """
     verif = verification(G)
     if len(G) == 0 or not verif:
         return None
@@ -93,6 +137,13 @@ def resolution(G):
 
 
 def gen_grille(N, diff: int):
+    """
+    fonction qui génère une grille de sudoku en fonction de la difficultée donnée, cette grille aura toujours
+    une solution
+    :param N: la taille de la grille
+    :param diff: l'indice de difficulté parmis [0,1,2]
+    :return: la grille partiellement remplie à résoudre
+    """
     grid = [[0]*N for _ in range(N)] #Grille vide
     diff_coefs = [0.5,0.35,0.25] #Coefficient de difficulté
     t = [i for i in range(1,N+1)] #Valeur entre 1 et 4 inclus
