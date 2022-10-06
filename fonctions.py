@@ -121,6 +121,7 @@ def resolution(G):
     :return: la grille complétée(list)
     """
     verif = verification(G)
+    a = False
     if len(G) == 0 or not verif:
         return None
     if est_complete(G):
@@ -129,11 +130,17 @@ def resolution(G):
         for j in range(len(G)):
             if G[i][j] == 0:
                 x, y = i, j
+                a = True
+                break
+        if a:
+            break
     for k in range(1,len(G)+1):
         G[x][y] = k
         res = resolution(G)
         if res is not None:
             return res
+    G[x][y] = 0
+
 
 
 def gen_grille(N, diff: int):
