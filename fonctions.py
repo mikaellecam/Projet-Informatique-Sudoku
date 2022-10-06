@@ -1,6 +1,7 @@
 from math import sqrt
 import random
 
+
 def afficher(G):
     if G is None:
         print("None")
@@ -27,6 +28,7 @@ def verifier_bloc(G,i):
                 return False
     return True
 
+
 def verifier_ligne(G,i):
     l = []
     for x in G[i]:
@@ -36,6 +38,7 @@ def verifier_ligne(G,i):
             else:
                 return False
     return True
+
 
 def verify_column(G,j):
     l = []
@@ -47,6 +50,7 @@ def verify_column(G,j):
                 return False
     return True
 
+
 def est_complete(G):
     for k in range(len(G)):
         for i in range(len(G)):
@@ -54,26 +58,10 @@ def est_complete(G):
                 return False
     return True
 
+
 def afficherline(G,l):
     affichage = f"\n| {G[l][0]} | {G[l][1]} || {G[l][2]} | {G[l][3]} |"
     return affichage
-
-def generationgrille(N):
-    nb = random.randint(abs((N**2)//3), (N**2)//3+1) # on ne rempli qu'a peu près 1/3 de la grille au préalable (difficulté)
-    grid = [[0]*N for _ in range(N)] # ambiguité de python on ne peut pas écrire [[0]*N]*N (a cause de la mutabilitée)
-    i = 0
-    while i < nb:
-        x, y = (random.randint(0, N-1), random.randint(0, N-1))
-        #print(x,y, grid[x][y], i)
-        if grid[x][y] == 0:
-            i += 1
-            grid[x][y] = random.randint(0, N)
-    if not verification(grid):
-        return generationgrille(N)
-    return grid
-
-
-
 
 
 def verification(G):
@@ -85,6 +73,7 @@ def verification(G):
         if not verify_column(G, k):
             return False
     return True
+
 
 def resolution(G):
     verif = verification(G)
@@ -101,6 +90,7 @@ def resolution(G):
         res = resolution(G)
         if res is not None:
             return res
+
 
 def gen_grille(N, diff: int):
     grid = [[0]*N for _ in range(N)] #Grille vide
