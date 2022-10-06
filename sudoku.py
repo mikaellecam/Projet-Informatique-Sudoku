@@ -17,5 +17,5 @@ def resolution(G):
     for k in range(1,len(G)+1):
         G[x][y] = k
         res = resolution(G)
-        if res != None:
+        if res is not None:
             return res
