@@ -103,7 +103,7 @@ def gen_grille(N, diff: int):
         grid[x][y] = t.pop(indexe) #on met le nombre qu'on a définit, et on l'enlève de la liste
         res = resolution(grid) #on essaie de résoudre
     if res is not None: #Si on trouve une solution
-        nb = round(N**2*diff_coefs[diff]) #le nombre de chiffre qu'il nous reste dans la grille
+        nb = round(N**2*diff_coefs[diff]) #le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
         nbactuel = N**2 #c'est le nombre qu'il y a actuellement dans la grille
         while nbactuel > nb: 
             x, y = random.randint(0, N - 1), random.randint(0, N - 1) #positions random dans lesquelles on enlève le chiffre
