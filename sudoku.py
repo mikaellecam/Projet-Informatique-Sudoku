@@ -16,7 +16,6 @@ for i in range(1000):
     else:
         L.pop()
 print(compteur)
-print(L[0])
 
 
 """G = gen_grille(4, 0)
