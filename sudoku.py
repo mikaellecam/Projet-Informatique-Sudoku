@@ -9,7 +9,7 @@ def resolution(G):
     if len(G) == 0 or not verif:
         return None
     if est_complete(G):
-        return afficher(G)
+        return G
     for i in range(len(G)):
         for j in range(len(G)):
             if G[i][j] == 0:
@@ -19,3 +19,7 @@ def resolution(G):
         res = resolution(G)
         if res is not None:
             return res
+
+G = generationgrille(4)
+print(afficher(G))
+print(afficher(resolution(G)))

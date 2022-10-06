@@ -2,6 +2,8 @@ from math import sqrt
 import random
 
 def afficher(G):
+    if G is None:
+        return
     affichage = "------------------"
     for k in range(len(G)):
         affichage += f"\n| {G[k][0]} | {G[k][1]} || {G[k][2]} | {G[k][3]} |"
@@ -56,7 +58,7 @@ def afficherline(G,l):
     return affichage
 
 def generationgrille(N):
-    nb = random.randint(abs((N**2)//3 - 1), (N**2)//3) # on ne rempli qu'a peu près 1/3 de la grille au préalable (difficulté)
+    nb = random.randint(abs((N**2)//3), (N**2)//3+1) # on ne rempli qu'a peu près 1/3 de la grille au préalable (difficulté)
     grid = [[0]*N for _ in range(N)] # ambiguité de python on ne peut pas écrire [[0]*N]*N (a cause de la mutabilitée)
     i = 0
     while i < nb:
