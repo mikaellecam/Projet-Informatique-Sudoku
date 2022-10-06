@@ -71,6 +71,10 @@ def generationgrille(N):
         return generationgrille(N)
     return grid
 
+
+
+
+
 def verification(G):
     for k in range(len(G)):
         if not verifier_ligne(G, k):
