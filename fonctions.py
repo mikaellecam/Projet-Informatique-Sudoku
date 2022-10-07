@@ -141,8 +141,58 @@ def resolution(G):
     G[x][y] = 0
 
 
+def recursive_construct(N, grid=None):
+    """
+    Fonction récursive qui permet de placer un nombre aléatoire dans la grille donnée en paramètre, si elle est
+    complète on la renvoie puisqu'elle est vraie. et on teste d'autres valeurs par cases au cas où il y aurait des
+    problèmes, cette fonction à des probabilitées uniformes et exécute N^2 appels max
+    :param N: longueur de la grille
+    :param grid: la grille qu'il faut remplir
+    :return: list
+    """
+    res = None
+    if grid is None:
+        grid = [[0]*N for _ in range(N)]
+    if est_complete(grid): # si on rentre dans ce cas c'est que la grille est forcément résolue
+        return grid        # donc on la renvoie
+    x,y = random.randint(0,N-1), random.randint(0,N-1)
+    while grid[x][y]:
+        x, y = random.randint(0, N - 1), random.randint(0, N - 1)  # On choisie une pos aléatoire pour y mettre un nb
+    t = [i for i in range(1,N+1)] # on génère les possibilitées de nb pour la case
+    while len(t) > 0:
+        grid[x][y] = t.pop(random.randint(0,len(t)-1)) # on remplace la case par le nombre choisi aléatoirement
+        if verification(grid): # on vérifie que le coup respecte les règles
+            res = recursive_construct(N,grid) # si oui on continue pour une autre case
+        if res is not None: # si il est différent de None c'est qu'on a résolu la grille
+            return res
+    grid[x][y] = 0
+    return None  # si jamais on a pas réussi on reset la case et on revient en arrière
 
-def gen_grille(N, diff: int):
+
+def gen_grille(N, diff):
+    """
+    Fonction qui permet la création d'une grille de sudoku totalement aléatoire, et qui utilise recursive_construction
+    pour générer une grille dont on sait qu'elle peut être résolue, puis on la vide en fonction de la diffcultée choisie
+    :param N: longueur de la grille voulue
+    :param diff: indice de difficultée
+    :return: list
+    """
+    diff_coefs = [0.5, 0.35, 0.25]  # Coefficient de difficulté
+    nb = round(
+        N ** 2 * diff_coefs[diff])  # le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
+    nbactuel = N ** 2  # c'est le nombre qu'il y a actuellement dans la grille
+    res = recursive_construct(N)
+    while nbactuel > nb:
+        x, y = random.randint(0, N - 1), random.randint(0,
+                                                        N - 1)  # positions random dans lesquelles on enlève le chiffre
+        if res[x][y]:
+            res[x][y] = 0  # on remplace le chiffre par un 0
+            nbactuel -= 1  # on a retiré un nombre donc on décrémente de 1 le nombre actuel
+    return res
+
+
+
+def gen_grille_other(N, diff: int):
     """
     fonction qui génère une grille de sudoku en fonction de la difficultée donnée, cette grille aura toujours
     une solution
@@ -162,56 +212,10 @@ def gen_grille(N, diff: int):
     if res is not None: #Si on trouve une solution
         nb = round(N**2*diff_coefs[diff]) #le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
         nbactuel = N**2 #c'est le nombre qu'il y a actuellement dans la grille
-        while nbactuel > nb: 
+        while nbactuel > nb:
             x, y = random.randint(0, N - 1), random.randint(0, N - 1) #positions random dans lesquelles on enlève le chiffre
             if res[x][y]:
                 res[x][y] = 0 #on remplace le chiffre par un 0
                 nbactuel -= 1 #on a retiré un nombre donc on décrémente de 1 le nombre actuel
         return res
-    return gen_grille(N, diff) #Si nous n'avons pas trouvé de solution pour la position aléatoire, nous recommencons avec (normalement) une autre position
-
-def count_0(m):
-    c = 0
-    for i in m:
-        c += i.count(0)
-    return c
-
-
-
-def gen_grille(N, grid=None):
-    #print(grid)
-    res = None
-    if grid is None:
-        grid = [[0]*N for _ in range(N)]
-    if est_complete(grid):
-        return grid
-    x,y = random.randint(0,N-1), random.randint(0,N-1)
-    while grid[x][y]:
-        x, y = random.randint(0, N - 1), random.randint(0, N - 1)
-    t = [i for i in range(1,N+1)]
-    while len(t) > 0:
-        grid[x][y] = t.pop(random.randint(0,len(t)-1))
-        if verification(grid):
-            res = gen_grille(N,grid)
-        if res is not None:
-            return res
-    #print(count_0(grid))
-    grid[x][y] = 0
-    return None
-
-def gen_grille_final(N, diff):
-    diff_coefs = [0.5, 0.35, 0.25]  # Coefficient de difficulté
-    nb = round(
-        N ** 2 * diff_coefs[diff])  # le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
-    nbactuel = N ** 2  # c'est le nombre qu'il y a actuellement dans la grille
-    res = gen_grille(N)
-    while nbactuel > nb:
-        x, y = random.randint(0, N - 1), random.randint(0,
-                                                        N - 1)  # positions random dans lesquelles on enlève le chiffre
-        if res[x][y]:
-            res[x][y] = 0  # on remplace le chiffre par un 0
-            nbactuel -= 1  # on a retiré un nombre donc on décrémente de 1 le nombre actuel
-    return res
-
-
-
+    return gen_grille_other(N, diff) #Si nous n'avons pas trouvé de solution pour la position aléatoire, nous recommencons avec (normalement) une autre position
