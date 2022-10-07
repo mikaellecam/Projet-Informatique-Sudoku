@@ -1,7 +1,6 @@
 from math import sqrt
 import random
 
-
 def afficher(G):
     """
     fonction qui permet d'afficher de manière propre une grille de sudoku
@@ -170,3 +169,49 @@ def gen_grille(N, diff: int):
                 nbactuel -= 1 #on a retiré un nombre donc on décrémente de 1 le nombre actuel
         return res
     return gen_grille(N, diff) #Si nous n'avons pas trouvé de solution pour la position aléatoire, nous recommencons avec (normalement) une autre position
+
+def count_0(m):
+    c = 0
+    for i in m:
+        c += i.count(0)
+    return c
+
+
+
+def gen_grille(N, grid=None):
+    #print(grid)
+    res = None
+    if grid is None:
+        grid = [[0]*N for _ in range(N)]
+    if est_complete(grid):
+        return grid
+    x,y = random.randint(0,N-1), random.randint(0,N-1)
+    while grid[x][y]:
+        x, y = random.randint(0, N - 1), random.randint(0, N - 1)
+    t = [i for i in range(1,N+1)]
+    while len(t) > 0:
+        grid[x][y] = t.pop(random.randint(0,len(t)-1))
+        if verification(grid):
+            res = gen_grille(N,grid)
+        if res is not None:
+            return res
+    #print(count_0(grid))
+    grid[x][y] = 0
+    return None
+
+def gen_grille_final(N, diff):
+    diff_coefs = [0.5, 0.35, 0.25]  # Coefficient de difficulté
+    nb = round(
+        N ** 2 * diff_coefs[diff])  # le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
+    nbactuel = N ** 2  # c'est le nombre qu'il y a actuellement dans la grille
+    res = gen_grille(N)
+    while nbactuel > nb:
+        x, y = random.randint(0, N - 1), random.randint(0,
+                                                        N - 1)  # positions random dans lesquelles on enlève le chiffre
+        if res[x][y]:
+            res[x][y] = 0  # on remplace le chiffre par un 0
+            nbactuel -= 1  # on a retiré un nombre donc on décrémente de 1 le nombre actuel
+    return res
+
+
+

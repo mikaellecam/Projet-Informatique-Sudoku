@@ -4,7 +4,7 @@ from fonctions import *
 """t = [[1,0,2,0], [2,4,0,3], [3,0,4,0], [0,0,0,2]]
 afficher(resolution(t))"""
 
-
+"""
 compteur = 0
 L = []
 for i in range(1000):
@@ -16,13 +16,16 @@ for i in range(1000):
     else:
         L.pop()
 print(compteur)
-print(L[0])
+"""
 
-
-"""G = gen_grille(4, 0)
+"""
+G = gen_grille(4, 0)
 afficher(G)
 afficher(resolution(G))
 """
 """G = generationgrille(4)
 print(afficher(G))
 print(afficher(resolution(G)))"""
+
+fs = gen_grille_final(4,1)
+afficher(fs)
