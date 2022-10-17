@@ -237,7 +237,7 @@ def mettre_valeur(Grille):
 def jouer():
     taille = int(input("Quelle taille souhaitez vous: "))
     difficulte = int(input("Quelle difficulté souhaitez vous de 1 à 3: "))
-    Grille = gen_grille_other(taille,difficulte)
+    Grille = gen_grille(taille,difficulte)
     if mettre_valeur(Grille) == 1:
         print("Bravo tu as complété la grille!")
         rep = input("Veux tu rejouer? (Y,N): ")
