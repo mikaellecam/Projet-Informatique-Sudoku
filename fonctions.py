@@ -50,7 +50,7 @@ def verifier_bloc(G,i):
     l = []
     for pos in coords:
         a,b = list(map(int,pos))
-        if 0 < G[a][b] <= 4:
+        if 0 < G[a][b] <= len(G):
             if G[a][b] not in l:
                 l.append(G[a][b])
             else:
@@ -67,7 +67,7 @@ def verifier_ligne(G,i):
     """
     l = []
     for x in G[i]:
-        if 0<x<=4:
+        if 0<x<=len(G):
             if x not in l or x==0:
                 l.append(x)
             else:
@@ -84,7 +84,7 @@ def verify_column(G,j):
     """
     l = []
     for i in range(len(G)):
-        if 0< G[i][j] <= 4:
+        if 0< G[i][j] <= len(G):
             if G[i][j] not in l:
                 l.append(G[i][j])
             else:
@@ -202,6 +202,7 @@ def gen_grille(N, diff):
         N ** 2 * diff_coefs[diff])  # le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
     nbactuel = N ** 2  # c'est le nombre qu'il y a actuellement dans la grille
     res = recursive_construct(N)
+    print("z")
     while nbactuel > nb:
         x, y = random.randint(0, N - 1), random.randint(0,
                                                         N - 1)  # positions random dans lesquelles on enlève le chiffre
