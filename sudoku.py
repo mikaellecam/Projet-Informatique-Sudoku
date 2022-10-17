@@ -27,5 +27,6 @@ afficher(resolution(G))
 print(afficher(G))
 print(afficher(resolution(G)))"""
 
-fs = gen_grille_final(4,1)
+#jouer()
+fs = gen_grille(9,1)
 afficher(fs)

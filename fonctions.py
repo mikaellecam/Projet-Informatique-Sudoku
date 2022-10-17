@@ -1,22 +1,41 @@
 from math import sqrt
 import random
 
-def afficher(G):
+def afficher(grille):
     """
     fonction qui permet d'afficher de manière propre une grille de sudoku
     :param G: la grille à afficher
     :return: None
     """
+    G = remplacage0(grille)
+    temp = ""
+    size = int(sqrt(len(G)))
     if G is None:
         print("None")
         return
-    affichage = "------------------"
-    for k in range(len(G)):
-        affichage += f"\n| {G[k][0]} | {G[k][1]} || {G[k][2]} | {G[k][3]} |"
-        if k == 1:
-            affichage += "\n------------------"
-        affichage += "\n" + "-"*(len(G)**2 + 2)
+    if len(G) == 4:
+        affichage = "---------"*size
+        for i in range(len(G)):
+            if i == size:
+                affichage += "\n"+ "---------"*size
+            affichage += f"\n| {G[i][0]} | {G[i][1]} || {G[i][2]} | {G[i][3]} |"
+            affichage += "\n"+ "---------"*size
+    if len(G) == 9:
+        affichage = "-------------"*size
+        for i in range(len(G)):
+            if i == size or i==2*size:
+                affichage += "\n"+ "-------------"*size
+            affichage += f"\n| {G[i][0]} | {G[i][1]} | {G[i][2]} || {G[i][3]} | {G[i][4]} | {G[i][5]} || {G[i][6]} | {G[i][7]} | {G[i][8]} |"
+            affichage += "\n"+ "-------------"*size
     print(affichage)
+
+def remplacage0(G):
+    A = [x[:] for x in G]
+    for i in range(len(G)):
+        for j in range(len(G)):
+            if A[i][j] == 0:
+                A[i][j] = ' '
+    return A
 
 
 def verifier_bloc(G,i):
@@ -168,6 +187,7 @@ def recursive_construct(N, grid=None):
     grid[x][y] = 0
     return None  # si jamais on a pas réussi on reset la case et on revient en arrière
 
+#TODO Make it work for the 3x3 soduko (optional just for the lols)
 
 def gen_grille(N, diff):
     """
@@ -190,32 +210,43 @@ def gen_grille(N, diff):
             nbactuel -= 1  # on a retiré un nombre donc on décrémente de 1 le nombre actuel
     return res
 
+def mettre_valeur(Grille):
+    afficher(Grille)
+    case = input("Selectionner une case(coordonnées i,j): ")
+    valeur = int(input("Quelle valeur voulez vous mettre dans cette case: "))
+    if est_complete(Grille):
+        return 1
+    if 0<=int(case[2])<len(Grille) and 0<=int(case[0])<len(Grille):
+        if 0<=valeur<=len(Grille) and 0<=valeur<=len(Grille):
+            Grille[int(case[2])][int(case[0])] = valeur
+            if verification(Grille):
+                mettre_valeur(Grille)
+            else:
+                print("Cette valeur ne peut pas être placé ici")
+                Grille[int(case[2])][int(case[0])] = 0
+                mettre_valeur(Grille)
+        else:
+            print(f"La valeur rentré n'est pas dans l'intervalle [1, {len(Grille)}]")
+            mettre_valeur(Grille)
+    else:
+        print("Les coordonnées de la case sont fausses.")
+        mettre_valeur(Grille)
 
 
-def gen_grille_other(N, diff: int):
-    """
-    fonction qui génère une grille de sudoku en fonction de la difficultée donnée, cette grille aura toujours
-    une solution
-    :param N: la taille de la grille
-    :param diff: l'indice de difficulté parmis [0,1,2]
-    :return: la grille partiellement remplie à résoudre
-    """
-    grid = [[0]*N for _ in range(N)] #Grille vide
-    diff_coefs = [0.5,0.35,0.25] #Coefficient de difficulté
-    t = [i for i in range(1,N+1)] #Valeur entre 1 et 4 inclus
-    x,y = random.randint(0,N-1), random.randint(0,N-1) #Position aléatoire de notre valeur aléatoire
-    res = None
-    while res is None and len(t) > 0: #Tant qu'on ne trouve pas de solution, on change le nombre aléatoire et recommence la résolution
-        indexe = random.randint(0,len(t)-1) #Le nombre(aléatoire) qu'on met dans la grille
-        grid[x][y] = t.pop(indexe) #on met le nombre qu'on a définit, et on l'enlève de la liste
-        res = resolution(grid) #on essaie de résoudre
-    if res is not None: #Si on trouve une solution
-        nb = round(N**2*diff_coefs[diff]) #le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
-        nbactuel = N**2 #c'est le nombre qu'il y a actuellement dans la grille
-        while nbactuel > nb:
-            x, y = random.randint(0, N - 1), random.randint(0, N - 1) #positions random dans lesquelles on enlève le chiffre
-            if res[x][y]:
-                res[x][y] = 0 #on remplace le chiffre par un 0
-                nbactuel -= 1 #on a retiré un nombre donc on décrémente de 1 le nombre actuel
-        return res
-    return gen_grille_other(N, diff) #Si nous n'avons pas trouvé de solution pour la position aléatoire, nous recommencons avec (normalement) une autre position
+
+def jouer():
+    taille = int(input("Quelle taille souhaitez vous: "))
+    difficulte = int(input("Quelle difficulté souhaitez vous de 1 à 3: "))
+    Grille = gen_grille_other(taille,difficulte)
+    if mettre_valeur(Grille) == 1:
+        print("Bravo tu as complété la grille!")
+        rep = input("Veux tu rejouer? (Y,N): ")
+        if rep == 'Y' or rep == 'N':
+            if rep == 'Y':
+                jouer()
+            else:
+                return
+        else:
+            print("J'ai ne pas compris, mais je le considère comme un non.")
+            return
+
