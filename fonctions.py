@@ -1,5 +1,6 @@
 from math import sqrt
 import random
+from re import A
 
 def afficher(grille):
     """
@@ -202,29 +203,55 @@ def gen_grille(N, diff):
         N ** 2 * diff_coefs[diff])  # le nombre de chiffre dans la liste qu'on veut obtenir en fonction de la difficulté
     nbactuel = N ** 2  # c'est le nombre qu'il y a actuellement dans la grille
     res = recursive_construct(N)
-    print("z")
     while nbactuel > nb:
-        x, y = random.randint(0, N - 1), random.randint(0,
-                                                        N - 1)  # positions random dans lesquelles on enlève le chiffre
+        x, y = random.randint(0, N - 1), random.randint(0,N - 1)  # positions random dans lesquelles on enlève le chiffre
         if res[x][y]:
             res[x][y] = 0  # on remplace le chiffre par un 0
             nbactuel -= 1  # on a retiré un nombre donc on décrémente de 1 le nombre actuel
     return res
 
+def coordsfix(Grille):
+    """
+    Fonction qui créer un dictionnaire des coordonnées et des valeurs des cases imposées par la génération de grille.
+    Ce qui permet de fixer les cases non modifiable
+    :param Grille: La grille qu'on regarde
+    :return: dictionnaire
+    """
+    dic = {}
+    for i in range(len(Grille)):
+        for j in range(len(Grille)):
+            if Grille[i][j] != 0:
+                dic[(i,j)] = Grille[i][j]
+    return dic
+
+
+
+
 def mettre_valeur(Grille):
     afficher(Grille)
-    case = input("Selectionner une case(coordonnées i,j): ")
-    valeur = int(input("Quelle valeur voulez vous mettre dans cette case: "))
     if est_complete(Grille):
-        return 1
-    if 0<=int(case[2])<len(Grille) and 0<=int(case[0])<len(Grille):
+        print("Bravo tu as complété la grille!")
+        rep = input("Veux tu rejouer? (Y,N): ")
+        if rep == 'Y':
+            jouer()
+        else:
+            print("Merci d'avoir joué")
+            return None
+    case = input("Selectionner une case(coordonnées i,j): ")
+    i = int(case[0])
+    j = int(case[2])
+    if 0<=i<len(Grille) and 0<=j<len(Grille):
+        if (i,j) in coords:
+            print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
+            mettre_valeur(Grille)
+        valeur = int(input("Quelle valeur voulez vous mettre dans cette case: "))
         if 0<=valeur<=len(Grille) and 0<=valeur<=len(Grille):
-            Grille[int(case[2])][int(case[0])] = valeur
+            Grille[i][j] = valeur
             if verification(Grille):
                 mettre_valeur(Grille)
             else:
                 print("Cette valeur ne peut pas être placé ici")
-                Grille[int(case[2])][int(case[0])] = 0
+                Grille[i][j] = 0
                 mettre_valeur(Grille)
         else:
             print(f"La valeur rentré n'est pas dans l'intervalle [1, {len(Grille)}]")
@@ -234,20 +261,10 @@ def mettre_valeur(Grille):
         mettre_valeur(Grille)
 
 
-
 def jouer():
     taille = int(input("Quelle taille souhaitez vous: "))
     difficulte = int(input("Quelle difficulté souhaitez vous de 1 à 3: "))
     Grille = gen_grille(taille,difficulte)
-    if mettre_valeur(Grille) == 1:
-        print("Bravo tu as complété la grille!")
-        rep = input("Veux tu rejouer? (Y,N): ")
-        if rep == 'Y' or rep == 'N':
-            if rep == 'Y':
-                jouer()
-            else:
-                return
-        else:
-            print("J'ai ne pas compris, mais je le considère comme un non.")
-            return
+    global coords; coords = coordsfix(Grille)
+    mettre_valeur(Grille)
 
