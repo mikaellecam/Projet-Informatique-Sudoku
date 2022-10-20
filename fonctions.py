@@ -188,7 +188,6 @@ def recursive_construct(N, grid=None):
     grid[x][y] = 0
     return None  # si jamais on a pas réussi on reset la case et on revient en arrière
 
-#TODO Make it work for the 3x3 soduko (optional just for the lols)
 
 def gen_grille(N, diff):
     """
@@ -226,7 +225,6 @@ def coordsfix(Grille):
 
 def mettre_valeur(Grille):
     afficher(Grille)
-    Grille = resolution(Grille)
     if est_complete(Grille):
         print("Bravo tu as complété la grille!")
         rep = input("Veux tu rejouer? (Y,N): ")
@@ -235,9 +233,9 @@ def mettre_valeur(Grille):
         else:
             print("Merci d'avoir joué")
             return None
-    case = input("Selectionner une case(écrit comme ceci: i,j): ")
+    case = input("Selectionner une case(écrit comme ceci: i,j où i c'est les lignes et j les colonnes): ")
     try:
-        i = int(case[0]);j = int(case[2])
+        i = int(case[0])-1;j = int(case[2])-1
         if (i,j) in coords:
             print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
             mettre_valeur(Grille)
@@ -253,10 +251,8 @@ def mettre_valeur(Grille):
         print("Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas des nombres")
         mettre_valeur(Grille)
     except IndexError:
-        print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: \n- coordonnées : [0,{len(Grille)-1}] \n- valeur : [0,{len(Grille)}]")
+        print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [0,{len(Grille)}]")
         mettre_valeur(Grille)
-    
-
 
 def jouer():
     try:
