@@ -224,9 +224,6 @@ def coordsfix(Grille):
                 dic[(i,j)] = Grille[i][j]
     return dic
 
-
-
-
 def mettre_valeur(Grille):
     afficher(Grille)
     Grille = resolution(Grille)
@@ -239,32 +236,39 @@ def mettre_valeur(Grille):
             print("Merci d'avoir joué")
             return None
     case = input("Selectionner une case(écrit comme ceci: i,j): ")
-    i = int(case[0]);j = int(case[2])
-    if 0<=i<len(Grille) and 0<=j<len(Grille):
+    try:
+        i = int(case[0]);j = int(case[2])
         if (i,j) in coords:
             print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
             mettre_valeur(Grille)
         valeur = int(input("Quelle valeur voulez vous mettre dans cette case: "))
-        if 0<=valeur<=len(Grille):
-            Grille[i][j] = valeur
-            if verification(Grille):
-                mettre_valeur(Grille)
-            else:
-                print("Cette valeur ne peut pas être placé ici")
-                Grille[i][j] = 0
-                mettre_valeur(Grille)
-        else:
-            print(f"La valeur rentré n'est pas dans l'intervalle [1, {len(Grille)}]")
+        Grille[i][j] = valeur
+        if verification(Grille):
             mettre_valeur(Grille)
-    else:
-        print("Les coordonnées de la case sont fausses.")
+        else:
+            print("Cette valeur ne peut pas être placé ici")
+            Grille[i][j] = 0
+            mettre_valeur(Grille)
+    except ValueError:
+        print("Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas des nombres")
         mettre_valeur(Grille)
+    except IndexError:
+        print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: \n- coordonnées : [0,{len(Grille)-1}] \n- valeur : [0,{len(Grille)}]")
+        mettre_valeur(Grille)
+    
 
 
 def jouer():
-    taille = int(input("Quelle taille souhaitez vous: "))
-    difficulte = int(input("Quelle difficulté souhaitez vous de 1 à 3: "))
-    Grille = gen_grille(taille,difficulte)
-    global coords; coords = coordsfix(Grille)
-    return mettre_valeur(Grille)
+    try:
+        taille = 2
+        difficulte = int(input("Quelle difficulté souhaitez vous de 1 à 3: "))
+        Grille = gen_grille(taille**2,difficulte-1)
+        global coords; coords = coordsfix(Grille)
+        return mettre_valeur(Grille)
+    except ValueError:
+        print("Les chiffres entrées ne sont pas des valeurs valables")
+        jouer()
+    except IndexError:
+        print("La difficulté n'est pas dans l'intervalle [1,3]")
+        jouer()
 
