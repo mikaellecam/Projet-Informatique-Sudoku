@@ -226,11 +226,12 @@ def coordsfix(Grille):
 
 def mettre_valeur(Grille):
     afficher(Grille)
+    Grille = resolution(Grille)
     if est_complete(Grille):
         print("Bravo tu as complété la grille!")
         rep = input("Veux tu rejouer? (Y,N): ")
         if rep == 'Y':
-            jouer()
+            return jouer()
         else:
             print("Merci d'avoir joué")
             return None
