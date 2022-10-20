@@ -29,6 +29,7 @@ def afficher(grille):
             affichage += "\n"+ "---------"*size
     print(affichage)
 
+
 def remplacage0(G):
     A = [x[:] for x in G]
     for i in range(len(G)):
