@@ -1,6 +1,5 @@
 from math import sqrt
 import random
-from re import A
 
 def afficher(grille):
     """
@@ -9,7 +8,6 @@ def afficher(grille):
     :return: None
     """
     G = remplacage0(grille)
-    temp = ""
     size = int(sqrt(len(G)))
     if G is None:
         print("None")
@@ -19,16 +17,17 @@ def afficher(grille):
         for i in range(len(G)):
             if i == size:
                 affichage += "\n"+ "---------"*size
-            affichage += f"\n| {G[i][0]} | {G[i][1]} || {G[i][2]} | {G[i][3]} |"
+            affichage += "\n"
+            for j in range(len(G)):
+                if (i,j) in coords:
+                    affichage += f"| \033[1;31m{G[i][j]}\033[1;37m "
+                else:
+                    affichage += f"| {G[i][j]} "
+                if j % 2 == 1:
+                    affichage += "|"
             affichage += "\n"+ "---------"*size
-    if len(G) == 9:
-        affichage = "-------------"*size
-        for i in range(len(G)):
-            if i == size or i==2*size:
-                affichage += "\n"+ "-------------"*size
-            affichage += f"\n| {G[i][0]} | {G[i][1]} | {G[i][2]} || {G[i][3]} | {G[i][4]} | {G[i][5]} || {G[i][6]} | {G[i][7]} | {G[i][8]} |"
-            affichage += "\n"+ "-------------"*size
     print(affichage)
+
 
 def remplacage0(G):
     A = [x[:] for x in G]
@@ -46,8 +45,8 @@ def verifier_bloc(G,i):
     :param i: indice du bloc(numéro en partant d'en haut a gauche vers en bas à droite)
     :return: bool
     """
-    x,y = (i//sqrt(len(G))*sqrt(len(G))),(i%sqrt(len(G))*sqrt(len(G)))
-    coords = [(x+i,y+j) for j in range(int(sqrt(len(G)))) for i in range(int(sqrt(len(G))))]
+    x, y = (i//sqrt(len(G))*sqrt(len(G))),(i%sqrt(len(G))*sqrt(len(G)))
+    coords = [(x+i, y+j) for j in range(int(sqrt(len(G)))) for i in range(int(sqrt(len(G))))]
     l = []
     for pos in coords:
         a,b = list(map(int,pos))
@@ -68,8 +67,8 @@ def verifier_ligne(G,i):
     """
     l = []
     for x in G[i]:
-        if 0<x<=len(G):
-            if x not in l or x==0:
+        if 0 < x <= len(G):
+            if x not in l or x == 0:
                 l.append(x)
             else:
                 return False
@@ -85,7 +84,7 @@ def verify_column(G,j):
     """
     l = []
     for i in range(len(G)):
-        if 0< G[i][j] <= len(G):
+        if 0 < G[i][j] <= len(G):
             if G[i][j] not in l:
                 l.append(G[i][j])
             else:
@@ -209,6 +208,7 @@ def gen_grille(N, diff):
             nbactuel -= 1  # on a retiré un nombre donc on décrémente de 1 le nombre actuel
     return res
 
+
 def coordsfix(Grille):
     """
     Fonction qui créer un dictionnaire des coordonnées et des valeurs des cases imposées par la génération de grille.
@@ -222,6 +222,7 @@ def coordsfix(Grille):
             if Grille[i][j] != 0:
                 dic[(i,j)] = Grille[i][j]
     return dic
+
 
 def mettre_valeur(Grille):
     afficher(Grille)
@@ -254,12 +255,14 @@ def mettre_valeur(Grille):
         print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [0,{len(Grille)}]")
         mettre_valeur(Grille)
 
+
 def jouer():
     try:
         taille = 2
         difficulte = int(input("Quelle difficulté souhaitez vous de 1 à 3: "))
         Grille = gen_grille(taille**2,difficulte-1)
-        global coords; coords = coordsfix(Grille)
+        global coords
+        coords = coordsfix(Grille)
         return mettre_valeur(Grille)
     except ValueError:
         print("Les chiffres entrées ne sont pas des valeurs valables")
