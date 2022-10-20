@@ -1,6 +1,6 @@
 from math import sqrt
 import random
-
+from re import A
 
 def afficher(grille):
     """
@@ -9,6 +9,7 @@ def afficher(grille):
     :return: None
     """
     G = remplacage0(grille)
+    temp = ""
     size = int(sqrt(len(G)))
     if G is None:
         print("None")
@@ -18,17 +19,16 @@ def afficher(grille):
         for i in range(len(G)):
             if i == size:
                 affichage += "\n"+ "---------"*size
-            affichage += "\n"
-            for j in range(len(G)):
-                if (i,j) in coords:
-                    affichage += f"| \033[1;31m{G[i][j]}\033[1;37m "
-                else:
-                    affichage += f"| {G[i][j]} "
-                if j % 2 == 1:
-                    affichage += "|"
+            affichage += f"\n| {G[i][0]} | {G[i][1]} || {G[i][2]} | {G[i][3]} |"
             affichage += "\n"+ "---------"*size
+    if len(G) == 9:
+        affichage = "-------------"*size
+        for i in range(len(G)):
+            if i == size or i==2*size:
+                affichage += "\n"+ "-------------"*size
+            affichage += f"\n| {G[i][0]} | {G[i][1]} | {G[i][2]} || {G[i][3]} | {G[i][4]} | {G[i][5]} || {G[i][6]} | {G[i][7]} | {G[i][8]} |"
+            affichage += "\n"+ "-------------"*size
     print(affichage)
-
 
 def remplacage0(G):
     A = [x[:] for x in G]
@@ -68,8 +68,8 @@ def verifier_ligne(G,i):
     """
     l = []
     for x in G[i]:
-        if 0 < x <= len(G):
-            if x not in l or x == 0:
+        if 0<x<=len(G):
+            if x not in l or x==0:
                 l.append(x)
             else:
                 return False
@@ -85,7 +85,7 @@ def verify_column(G,j):
     """
     l = []
     for i in range(len(G)):
-        if 0 < G[i][j] <= len(G):
+        if 0< G[i][j] <= len(G):
             if G[i][j] not in l:
                 l.append(G[i][j])
             else:
@@ -106,7 +106,7 @@ def est_complete(G):
     return True
 
 
-def afficherline(G, l):
+def afficherline(G,l):
     """
     fonction qui permet d'afficher une ligne d'indice donné
     :param G: la grille utilisée
@@ -188,7 +188,6 @@ def recursive_construct(N, grid=None):
     grid[x][y] = 0
     return None  # si jamais on a pas réussi on reset la case et on revient en arrière
 
-#TODO Make it work for the 3x3 soduko (optional just for the lols)
 
 def gen_grille(N, diff):
     """
@@ -234,9 +233,9 @@ def mettre_valeur(Grille):
         else:
             print("Merci d'avoir joué")
             return None
-    case = input("Selectionner une case(écrit comme ceci: i,j): ")
+    case = input("Selectionner une case(écrit comme ceci: i,j où i c'est les lignes et j les colonnes): ")
     try:
-        i = int(case[0]);j = int(case[2])
+        i = int(case[0])-1;j = int(case[2])-1
         if (i,j) in coords:
             print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
             mettre_valeur(Grille)
@@ -252,9 +251,8 @@ def mettre_valeur(Grille):
         print("Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas des nombres")
         mettre_valeur(Grille)
     except IndexError:
-        print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: \n- coordonnées : [0,{len(Grille)-1}] \n- valeur : [0,{len(Grille)}]")
+        print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [0,{len(Grille)}]")
         mettre_valeur(Grille)
-    
 
 def jouer():
     try:
@@ -269,3 +267,4 @@ def jouer():
     except IndexError:
         print("La difficulté n'est pas dans l'intervalle [1,3]")
         jouer()
+
