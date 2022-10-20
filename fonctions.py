@@ -229,6 +229,7 @@ def coordsfix(Grille):
 
 def mettre_valeur(Grille):
     afficher(Grille)
+    Grille = resolution(Grille)
     if est_complete(Grille):
         print("Bravo tu as complété la grille!")
         rep = input("Veux tu rejouer? (Y,N): ")
@@ -237,15 +238,14 @@ def mettre_valeur(Grille):
         else:
             print("Merci d'avoir joué")
             return None
-    case = input("Selectionner une case(coordonnées i,j): ")
-    i = int(case[0])
-    j = int(case[2])
+    case = input("Selectionner une case(écrit comme ceci: i,j): ")
+    i = int(case[0]);j = int(case[2])
     if 0<=i<len(Grille) and 0<=j<len(Grille):
         if (i,j) in coords:
             print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
             mettre_valeur(Grille)
         valeur = int(input("Quelle valeur voulez vous mettre dans cette case: "))
-        if 0<=valeur<=len(Grille) and 0<=valeur<=len(Grille):
+        if 0<=valeur<=len(Grille):
             Grille[i][j] = valeur
             if verification(Grille):
                 mettre_valeur(Grille)
@@ -266,5 +266,5 @@ def jouer():
     difficulte = int(input("Quelle difficulté souhaitez vous de 1 à 3: "))
     Grille = gen_grille(taille,difficulte)
     global coords; coords = coordsfix(Grille)
-    mettre_valeur(Grille)
+    return mettre_valeur(Grille)
 
