@@ -1,6 +1,6 @@
 from math import sqrt
 import random
-from re import A
+
 
 def afficher(grille):
     """
@@ -9,7 +9,6 @@ def afficher(grille):
     :return: None
     """
     G = remplacage0(grille)
-    temp = ""
     size = int(sqrt(len(G)))
     if G is None:
         print("None")
@@ -19,15 +18,15 @@ def afficher(grille):
         for i in range(len(G)):
             if i == size:
                 affichage += "\n"+ "---------"*size
-            affichage += f"\n| {G[i][0]} | {G[i][1]} || {G[i][2]} | {G[i][3]} |"
+            affichage += "\n"
+            for j in range(len(G)):
+                if (i,j) in coords:
+                    affichage += f"| \033[1;31m{G[i][j]}\033[1;37m "
+                else:
+                    affichage += f"| {G[i][j]} "
+                if j % 2 == 1:
+                    affichage += "|"
             affichage += "\n"+ "---------"*size
-    if len(G) == 9:
-        affichage = "-------------"*size
-        for i in range(len(G)):
-            if i == size or i==2*size:
-                affichage += "\n"+ "-------------"*size
-            affichage += f"\n| {G[i][0]} | {G[i][1]} | {G[i][2]} || {G[i][3]} | {G[i][4]} | {G[i][5]} || {G[i][6]} | {G[i][7]} | {G[i][8]} |"
-            affichage += "\n"+ "-------------"*size
     print(affichage)
 
 def remplacage0(G):
@@ -68,8 +67,8 @@ def verifier_ligne(G,i):
     """
     l = []
     for x in G[i]:
-        if 0<x<=len(G):
-            if x not in l or x==0:
+        if 0 < x <= len(G):
+            if x not in l or x == 0:
                 l.append(x)
             else:
                 return False
@@ -85,7 +84,7 @@ def verify_column(G,j):
     """
     l = []
     for i in range(len(G)):
-        if 0< G[i][j] <= len(G):
+        if 0 < G[i][j] <= len(G):
             if G[i][j] not in l:
                 l.append(G[i][j])
             else:
@@ -106,7 +105,7 @@ def est_complete(G):
     return True
 
 
-def afficherline(G,l):
+def afficherline(G, l):
     """
     fonction qui permet d'afficher une ligne d'indice donné
     :param G: la grille utilisée
@@ -226,7 +225,6 @@ def coordsfix(Grille):
 
 def mettre_valeur(Grille):
     afficher(Grille)
-    Grille = resolution(Grille)
     if est_complete(Grille):
         print("Bravo tu as complété la grille!")
         rep = input("Veux tu rejouer? (Y,N): ")
@@ -257,7 +255,6 @@ def mettre_valeur(Grille):
         mettre_valeur(Grille)
     
 
-
 def jouer():
     try:
         taille = 2
@@ -271,4 +268,3 @@ def jouer():
     except IndexError:
         print("La difficulté n'est pas dans l'intervalle [1,3]")
         jouer()
-
