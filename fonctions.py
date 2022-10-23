@@ -237,6 +237,9 @@ def mettre_valeur(Grille):
     case = input("Selectionner une case(écrit comme ceci: i,j où i c'est les lignes et j les colonnes): ")
     try:
         i = int(case[0])-1;j = int(case[2])-1
+        if i < 1 or j < 1:
+            print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [1,{len(Grille)}]")
+            mettre_valeur(Grille)
         if (i,j) in coords:
             print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
             mettre_valeur(Grille)
@@ -252,7 +255,7 @@ def mettre_valeur(Grille):
         print("Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas des nombres")
         mettre_valeur(Grille)
     except IndexError:
-        print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [0,{len(Grille)}]")
+        print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [1,{len(Grille)}]")
         mettre_valeur(Grille)
 
 
