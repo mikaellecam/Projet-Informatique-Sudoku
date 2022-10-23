@@ -68,7 +68,7 @@ def verifier_ligne(G,i):
     l = []
     for x in G[i]:
         if 0 < x <= len(G):
-            if x not in l or x == 0:
+            if x not in l:
                 l.append(x)
             else:
                 return False
@@ -237,7 +237,7 @@ def mettre_valeur(Grille):
     case = input("Selectionner une case(écrit comme ceci: i,j où i c'est les lignes et j les colonnes): ")
     try:
         i = int(case[0])-1;j = int(case[2])-1
-        if i < 1 or j < 1:
+        if i < 0 or j < 0:
             print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [1,{len(Grille)}]")
             mettre_valeur(Grille)
         if (i,j) in coords:
