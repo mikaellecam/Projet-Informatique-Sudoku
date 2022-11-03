@@ -242,7 +242,6 @@ def mettre_valeur(Grille):
             return mettre_valeur(Grille)
         if (i,j) in coords:
             print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
-            print(i,j)
             return mettre_valeur(Grille)
         valeur = int(input("Quelle valeur voulez vous mettre dans cette case: "))
         Grille[i][j] = valeur
