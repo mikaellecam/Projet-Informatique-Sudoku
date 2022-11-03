@@ -239,24 +239,29 @@ def mettre_valeur(Grille):
         i = int(case[0])-1;j = int(case[2])-1
         if i < 0 or j < 0:
             print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [1,{len(Grille)}]")
-            mettre_valeur(Grille)
+            return mettre_valeur(Grille)
         if (i,j) in coords:
             print("Les coordonnées sélectionnées correspondent à une valeur pas modifiable")
-            mettre_valeur(Grille)
+            print(i,j)
+            return mettre_valeur(Grille)
         valeur = int(input("Quelle valeur voulez vous mettre dans cette case: "))
         Grille[i][j] = valeur
+        if valeur not in [0,1,2,3,4]:
+            print("La valeur n'est pas dans l'intervalle [0,4].")
+            Grille[i][j] = 0
+            return mettre_valeur(Grille)
         if verification(Grille):
-            mettre_valeur(Grille)
+            return mettre_valeur(Grille)
         else:
             print("Cette valeur ne peut pas être placé ici")
             Grille[i][j] = 0
-            mettre_valeur(Grille)
+            return mettre_valeur(Grille)
     except ValueError:
         print("Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas des nombres")
-        mettre_valeur(Grille)
+        return mettre_valeur(Grille)
     except IndexError:
         print(f"Le(s) chiffre(s) des coordonnées ou de la valeur ne sont pas dans l'intervalle correspondant: [1,{len(Grille)}]")
-        mettre_valeur(Grille)
+        return mettre_valeur(Grille)
 
 
 def jouer():
@@ -269,8 +274,8 @@ def jouer():
         return mettre_valeur(Grille)
     except ValueError:
         print("Les chiffres entrées ne sont pas des valeurs valables")
-        jouer()
+        return jouer()
     except IndexError:
         print("La difficulté n'est pas dans l'intervalle [1,3]")
-        jouer()
+        return jouer()
 
