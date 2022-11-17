@@ -1,4 +1,4 @@
-def segment(fichier, coords1, coords2: tuple, rayon: float, color: tuple):
+def segment(fichier, coords1, coords2: tuple, color: tuple):
     longueur=fichier[1]
     largeur=fichier[2]
     x1,y1 = coords1
