@@ -33,8 +33,7 @@ def cercle(fichier, coords: tuple, rayon: float, color: tuple):
 
 
 with open('output.ppm', 'w') as f:
-    lines = []
-    for line in lines:
+    for line in Fichier:
         f.write(line + "\n")
  
     
