@@ -1,0 +1,21 @@
+def segment(fichier, coords1, coords2: tuple, rayon: float, color: tuple):
+    longueur=fichier[1]
+    largeur=fichier[2]
+    x1,y1 = coords1
+    x2,y2 = coords2
+    color = (str(color[0]), str(color[1]), str(color[2]))
+    
+    if x1<largeur and x2<largeur and y1<longueur and y2<longueur:
+        if x1==x2:
+            dy=abs(y2-y1)
+            for i in range(dy):
+                fichier[i+largeur]= f"{color[0]} {color[1]} {color[2]}" + "\n"
+        elif y1==y2:
+            dx=abs(x2-x1)
+            for i in range(dx):
+                fichier[i]=f"{color[0]} {color[1]} {color[2]}" + "\n"
+        else:
+            dx=abs(x2-x1)
+            for i in range(dx):
+                fichier[i+largeur]=f"{color[0]} {color[1]} {color[2]}" + "\n"
+                
