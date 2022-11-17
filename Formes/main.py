@@ -11,20 +11,19 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
     :return: None
     """
     x, y = coords
-    longueur = int(fichier[1])
     color = rgb(color)
+
     color = (str(color[0]), str(color[1]), str(color[2]))
-    for i in range(x-rayon, x+rayon):
-        for j in range(y-rayon, y+rayon):
-            if 0 <= i * longueur + j <= len(fichier):
-                if sqrt((x-i)**2 + (y-j)**2) <= rayon:
+    for i in range(x - rayon, x + rayon):
+        for j in range(y - rayon, y + rayon):
+            if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
+                if sqrt((x - i) ** 2 + (y - j) ** 2) <= rayon:
+                    fichier[i][j] = color
+                    #print(fichier[i][j])
 
-                    fichier[i*longueur + j] = f"{color[0]} {color[1]} {color[2]}" + "\n"
 
-
-Fichier = createfile(3,3)
-print(Fichier)
-#cercle(Fichier,(512,512),300,"blanc")
+Fichier = createfile(1024,1024)
+cercle(Fichier,(1000,1000),300,"blanc")
 
 with open('Formes\output.ppm', 'w') as f:
     for i in range(4):

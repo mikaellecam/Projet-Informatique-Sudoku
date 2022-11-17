@@ -21,5 +21,5 @@ def rgb(name):
 def createfile(x,y):
     File = [["P3"], [str(x)], [str(y)], ["255"]]
     for i in range(x):
-        File.append([(255,255,0)]*y)
+        File.append([(0,0,0)]*y)
     return File
