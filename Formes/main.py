@@ -1,5 +1,5 @@
 from math import sqrt
-from PIL import Image
+
 
 def createfile(x,y):
     File = ["P3", str(x), str(y), "255"]
@@ -22,17 +22,19 @@ def cercle(fichier, coords: tuple, rayon: float, color: tuple):
     :return: None
     """
     x, y = coords
-    pixels = []
+    longueur = int(fichier[1])
+    color = (str(color[0]), str(color[1]), str(color[2]))
     for i in range(x-rayon, x+rayon):
         for j in range(y-rayon, y+rayon):
-            if sqrt(i**2 + j**2) <= rayon:
-                pixels.append(color)
-            else:
-                pixels.append((0, 0, 0))
+            if 0 <= i * longueur + j <= len(fichier):
+                if sqrt((x-i)**2 + (y-j)**2) <= rayon:
+
+                    fichier[i*longueur + j] = f"{color[0]} {color[1]} {color[2]}" + "\n"
 
 
-
-"""with open('output.ppm', 'w') as f:
-    lines = ["P3",'1024','1024','255','255 0 0', '0 255 0', '0 0 255', '255 255 0', "255 255 255",'0 0 0']
+with open('output.ppm', 'w') as f:
+    lines = []
     for line in lines:
-        f.write(line + "\n")"""
+        f.write(line + "\n")
+ 
+    
