@@ -3,6 +3,8 @@ def rgb(name):
         name.lower()
         if name == "blanc":
             return (255,255,255)
+        elif name == "noir":
+            return (0,0,0)
         elif name == "rouge":
             return (255,0,0)
         elif name == "bleu":
@@ -21,5 +23,5 @@ def rgb(name):
 def createfile(x,y):
     File = [["P3"], [str(x)], [str(y)], ["255"]]
     for i in range(x):
-        File.append([(0,0,0)]*y)
+        File.append([rgb("noir")]*y)
     return File
