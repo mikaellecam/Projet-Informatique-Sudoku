@@ -19,8 +19,7 @@ def rgb(name):
         return "Le nom de la couleur n'est pas reconnu"
 
 def createfile(x,y):
-    File = ["P3", str(x), str(y), "255"]
+    File = [["P3"], [str(x)], [str(y)], ["255"]]
     for i in range(x):
-        for j in range(y):
-            File.append("0 0 0")
+        File.append([(255,255,0)]*y)
     return File
