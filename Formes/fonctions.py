@@ -1,5 +1,5 @@
 def rgb(name):
-    if name in ["blanc","rouge",'bleu',"vert","jaune","magenta","cyan"]:
+    if name in ["blanc", "noir", "rouge",'bleu',"vert","jaune","magenta","cyan"]:
         name.lower()
         if name == "blanc":
             return (255,255,255)
