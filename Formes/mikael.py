@@ -103,10 +103,38 @@ def rectangle_dapresenoncé(fichier,point1,point2,color):
                 fichier[j+4][i] = couleur
 
 
-Fichier = createfile(32,32)
-#cercle(Fichier,(16,16),10,"blanc")
-rectangle_dapresenoncé(Fichier,(21,21),(0,0),"blanc")
+def segment_test(fichier, point1, point2, color):
+    couleur = rgb(color)
+    x1,y1 = point1
+    x2,y2 = point2
+    compteur = 0
 
+    if abs(x2) == abs(x1):
+        for i in range(min(x1,x2),max(x1,x2)):
+            compteur +=1
+            print(compteur)
+            for j in range(min(y1,y2), max(y1,y2)):
+                if i == x1:
+                    fichier[j+4][i] = couleur
+    else:
+        pente = (y2-y1)/(x2-x1)
+        origine = y1 - pente*x1
+    
+        for i in range(min(x1,x2),max(x1,x2)):
+            for j in range(min(y1,y2), max(y1,y2)):
+                if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
+                    print(int(pente*i - j + origine))
+                    if int(pente*i - j + origine) == 0:
+                        fichier[j+4][i] = couleur
+
+
+
+Fichier = createfile(32,32)
+
+segment_test(Fichier,(16,16),(16,30),"rouge")
+"""segment_test(Fichier,(120,120),(250,120),"rouge")
+segment_test(Fichier,(120,350),(250,350),"rouge")
+segment_test(Fichier,(120,600),(250,600),"rouge")"""
 
 with open('Formes\output.ppm', 'w') as f:
     for i in range(4):
