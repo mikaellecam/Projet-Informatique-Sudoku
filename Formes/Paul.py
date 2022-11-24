@@ -1,4 +1,4 @@
-from math import sqrt
+from random  import randint
 from fonctions import *
 
 
@@ -55,6 +55,9 @@ def segment(fichier, coords1, coords2: tuple, color: tuple):
                     i += 1
 
 
+def determinant(vec1, vec2):
+    return vec1[0]*vec2[1] - vec2[0]*vec1[1]
+
 def polygone(fichier: list, coords: list, color: str):
     """
     fonction qui permet d'ajouter un polygone à n sommets, de la couleur donnée en paramètre
@@ -64,9 +67,27 @@ def polygone(fichier: list, coords: list, color: str):
     :return: None
     """
     color = rgb(color)
+    vecteurs = [] # on a les vecteurs de chaques segment
     # rajouter le sort au cas où les points ne sont pas donnés dans l'ordre
     for i in range(len(coords) - 1):
+        vecteurs.append((abs(coords[i][1]-coords[i+1][1]), abs(coords[i][0] - coords[i+1][0])))
         segment(fichier, coords[i], coords[i + 1], color)
+    print(vecteurs)
+
+    for i in range(1,20):
+        for j in range(1, 20):
+            vec = (i, j)
+            cond = False
+            for vec1 in vecteurs:
+                if determinant(vec, vec1):
+                    cond = True
+                    break
+            if not cond:
+                break
+        if not cond:
+            break
+
+
 
     # On détermine les coordonnées des extrémitées pour ensuite parcourir tous les pixels du polygone
     # et identifier ceux que l'on veut modifier
@@ -88,14 +109,13 @@ def polygone(fichier: list, coords: list, color: str):
         for j in range(less_x[1], max_x[1]):
             if fichier[i][j] != color:
                 compteur = 0
-                # TODO adapter pour éviter d'avoir un segment dans la même direction que un coté.
+                # TODO adapter pour éviter d'avoir un segment dans la même direction que un coté. avec des équations
+
                 for k in range(i, max_x[0]):
                     if fichier[i][k] == color and fichier[i][k - 1] != color:
                         compteur += 1
                 if compteur % 2 == 1:
                     fichier[i][j] = color
-
-
 
 def rgb(name):
     if name in ["blanc", "noir", "rouge", 'bleu', "vert", "jaune", "magenta", "cyan"]:
