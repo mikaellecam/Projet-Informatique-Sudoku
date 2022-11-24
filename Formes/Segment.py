@@ -36,10 +36,10 @@ def segment(entete,fichier, coords1, coords2: tuple, color: tuple):
                 for j in range(-largeur//2,largeur//2):
                     if (abs(a*(x1+j)+i)/abs(sqrt(a**2+1)))<0.5:
                         fichier[x1+j][i]=color
-                if a<0 and x1<largeur and fichier[x1][y1+i]!=color:
+                if a<0 and x1<largeur and fichier[x1][i]!=color:
                     x1=x1+1
 
-                elif a>0 and x1>0 and fichier[x1][y1+i]!=color :
+                elif a>0 and x1>0 and fichier[x1][i]!=color :
                     x1=x1-1
                    
                         
