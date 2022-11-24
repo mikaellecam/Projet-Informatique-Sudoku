@@ -22,8 +22,8 @@ def rgb(name):
 def createfile(x,y):
     File = ["P3", str(x), str(y), "255"]
     F=[]
-    for i in range(x):
-        F.append([rgb("noir")]*y)
+    for i in range(y):
+        F.append([rgb("noir")]*x)
     return F,File
 
 Fichier, entete = createfile(1024,1024)
@@ -33,7 +33,7 @@ Fichier, entete = createfile(1024,1024)
 with open('output.ppm', 'w') as f:
     for i in range(4):
         f.write(str(entete[i])+ "\n")
-    for k in range(int(entete[1])):
-        for j in range(int(entete[2])):
+    for k in range(int(entete[2])):
+        for j in range(int(entete[1])):
             f.write(" ".join((str(Fichier[k][j][0]), str(Fichier[k][j][1]), str(Fichier[k][j][2]))) + "\n")
     f.close()
