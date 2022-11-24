@@ -18,8 +18,9 @@ def rgb(name):
         elif name == "cyan":
             return (0,255,255)
     else:
-        return "Le nom de la couleur n'est pas reconnu"
-
+        print("Le nom de la couleur n'est pas reconnu")
+        return (0,0,0)
+        
 def createfile(x,y):
     File = [["P3"], [str(x)], [str(y)], ["255"]]
     for i in range(x):
