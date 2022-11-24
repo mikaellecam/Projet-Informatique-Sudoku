@@ -50,40 +50,8 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
                     fichier[i][j] = color
                     #print(fichier[i][j])
 
-#ça ne fonctionne pas très bien                    
-def segment(fichier, coords1, coords2: tuple, color: tuple):
-    
-    longueur=int(fichier[1][0])
-    largeur=int(fichier[2][0])
-    
-    if coords1[1]<coords2[1]:
-        x1,y1=coords1 #x1 y1 plus en haut
-        x2,y2=coords2
-    else:
-        x1,y1=coords2
-        x2,y2=coords1
-    
-    if x1<largeur and x2<largeur and y1<longueur and y2<longueur:
-        if x1==x2:
-            for i in range(y1,y2):
-                fichier[x1][i]= color
-                print(fichier[x1][i])
-                print(i)
-        elif y1==y2:
-            for i in range(min(x1,x2),max(x1,x2)):
-                fichier[i][y1]= color
-        else:
-            i=y1
-            if x1<x2:
-                for j in range(x1,x2,1):
-                    fichier[i][j]=color
-                    i+=1
-            else:
-                for j in range(x1,x2,-1):
-                    fichier[i][j]=color
-                    i+=1
                          
-def rectangle_dapresenoncé(fichier,point1,point2,color):
+def rectangle(fichier,point1,point2,color):
     """
     Fonction permettant de rajouter un cercle basé sur deux points, le premier qui est en haut à droite et le
     deuxième qui en bas à gauche.
@@ -107,7 +75,6 @@ def segment_test(fichier, point1, point2, color):
     couleur = rgb(color)
     x1,y1 = point1
     x2,y2 = point2
-    compteur = 0
 
     if abs(x2) == abs(x1):
         for j in range(min(y1,y2), max(y1,y2)):
