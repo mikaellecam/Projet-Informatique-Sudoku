@@ -1,6 +1,35 @@
 from math import sqrt
 from fonctions import *
 
+def createfile(x,y):
+    File = [["P3"], [str(x)], [str(y)], ["255"]]
+    for i in range(y):
+        File.append([rgb("noir")]*x)
+    return File
+
+def rgb(name):
+    if name in ["blanc", "noir", "rouge",'bleu',"vert","jaune","magenta","cyan"]:
+        name.lower()
+        if name == "blanc":
+            return (255,255,255)
+        elif name == "noir":
+            return (0,0,0)
+        elif name == "rouge":
+            return (255,0,0)
+        elif name == "bleu":
+            return (0,0,255)
+        elif name == "vert":
+            return (0,255,0)
+        elif name == "jaune":
+            return (255,255,0)
+        elif name == "magenta":
+            return (255,0,255)
+        elif name == "cyan":
+            return (0,255,255)
+    else:
+        print("Le nom de la couleur n'est pas reconnu")
+        return (0,0,0)
+
 def cercle(fichier, coords: tuple, rayon: float, color: str):
     """
     fonction permettant de rajouter un cercle de centre coords et d'un certain rayon, avec une certaine couleur
@@ -67,46 +96,16 @@ def rectangle_dapresenoncé(fichier,point1,point2,color):
     couleur = rgb(color)
     x1,y1 = point1
     x2,y2 = point2
-    longueur = x2 - x1
-    largeur = y2 - y1
 
-    for i in range(x1,x1+longueur+1):
-        for j in range(y1,y1+largeur+1):
-            if 0<=i<=int(fichier[1][0]) and 0<=j<=int(fichier[2][0]):
+    for i in range(min(x1,x2),max(x1,x2)):
+        for j in range(min(y1,y2),max(y1,y2)):
+            if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
                 fichier[j+4][i] = couleur
 
-def rgb(name):
-    if name in ["blanc", "noir", "rouge",'bleu',"vert","jaune","magenta","cyan"]:
-        name.lower()
-        if name == "blanc":
-            return (255,255,255)
-        elif name == "noir":
-            return (0,0,0)
-        elif name == "rouge":
-            return (255,0,0)
-        elif name == "bleu":
-            return (0,0,255)
-        elif name == "vert":
-            return (0,255,0)
-        elif name == "jaune":
-            return (255,255,0)
-        elif name == "magenta":
-            return (255,0,255)
-        elif name == "cyan":
-            return (0,255,255)
-    else:
-        print("Le nom de la couleur n'est pas reconnu")
-        return (0,0,0)
 
-def createfile(x,y):
-    File = [["P3"], [str(x)], [str(y)], ["255"]]
-    for i in range(y):
-        File.append([rgb("noir")]*x)
-    return File
-
-Fichier = createfile(512,512)
+Fichier = createfile(32,32)
 #cercle(Fichier,(16,16),10,"blanc")
-rectangle_dapresenoncé(Fichier,(-10,-10),(600,300),"blanc")
+rectangle_dapresenoncé(Fichier,(21,21),(0,0),"blanc")
 
 
 with open('Formes\output.ppm', 'w') as f:
