@@ -71,7 +71,7 @@ def rectangle(fichier,point1,point2,color):
                 fichier[j+4][i] = couleur
 
 
-def segment_test(fichier, point1, point2, color):
+def segment_test(fichier, point1, point2, color='blanc',e=1):
     couleur = rgb(color)
     x1,y1 = point1
     x2,y2 = point2
@@ -86,25 +86,24 @@ def segment_test(fichier, point1, point2, color):
     else:
         pente = (y2-y1)/(x2-x1)
         origine = y1 - pente*x1
-    
+        largeur = [_ for _ in range(int(abs(pente))+e)]
+
         for i in range(min(x1,x2),max(x1,x2)):
             for j in range(min(y1,y2), max(y1,y2)):
                 if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
-                    if int(pente*i - j + origine) == 0:
+                    if int(pente*i - j + origine) in largeur:
                         fichier[j+4][i] = couleur
 
 
 
 Fichier = createfile(1024,1024)
 
-segment_test(Fichier,(120,120),(120,600),"rouge")
-segment_test(Fichier,(120,120),(250,120),"rouge")
-segment_test(Fichier,(120,350),(250,350),"rouge")
-segment_test(Fichier,(120,600),(250,600),"rouge")
+segment_test(Fichier,(120,120),(120,600),"rouge",9)
 
-segment_test(Fichier,(400,120),(530,120),"rouge")
-segment_test(Fichier,(530,120),(400,600),"rouge")
-segment_test(Fichier,(400,600),(530,600),'rouge')
+segment_test(Fichier,(120,120),(250,120),"rouge")
+
+segment_test(Fichier,(1000,120),(400,600),"rouge",9)
+
 
 with open('Formes\output.ppm', 'w') as f:
     for i in range(4):
