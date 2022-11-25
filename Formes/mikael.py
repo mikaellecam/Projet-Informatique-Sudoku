@@ -71,7 +71,7 @@ def rectangle(fichier,point1,point2,color):
                 fichier[j+4][i] = couleur
 
 
-def segment_test(fichier, point1, point2, color='blanc',e=1):
+def segment(fichier, point1, point2, color='blanc',e=1):
     couleur = rgb(color)
     x1,y1 = point1
     x2,y2 = point2
@@ -102,11 +102,11 @@ def segment_test(fichier, point1, point2, color='blanc',e=1):
 
 Fichier = createfile(1024,1024)
 
-segment_test(Fichier,(120,120),(120,600),"rouge")
+segment(Fichier,(120,120),(120,600),"rouge")
 
-segment_test(Fichier,(120,120),(250,120),"rouge",40)
+segment(Fichier,(120,120),(250,120),"rouge")
 
-segment_test(Fichier,(1000,120),(400,600),"rouge")
+segment(Fichier,(1000,120),(400,600),"rouge")
 
 
 with open('Formes\output.ppm', 'w') as f:
