@@ -23,40 +23,73 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
 
 
 # ça ne fonctionne pas très bien
-def segment(fichier, coords1, coords2: tuple, color: tuple):
-    longueur = int(fichier[1][0])
-    largeur = int(fichier[2][0])
+def segment(fichier, point1, point2, color='blanc',e=1):
+    couleur = rgb(color)
+    x1,y1 = point1
+    x2,y2 = point2
 
-    if coords1[1] < coords2[1]:
-        x1, y1 = coords1  # x1 y1 plus en haut
-        x2, y2 = coords2
+    if abs(x2) == abs(x1):
+        for j in range(min(y1,y2), max(y1,y2)):
+                fichier[j+4][x1] = couleur
+                for k in range(e):
+                    fichier[j+4][x1+k] = couleur
+    elif abs(y2) == abs(y1):
+        for i in range(min(x1,x2),max(x1,x2)):
+                if 0<=i<int(fichier[1][0]):
+                    fichier[y1+4][i] = couleur
+                    for k in range(e):
+                        fichier[y1+4+k][i] = couleur
     else:
-        x1, y1 = coords2
-        x2, y2 = coords1
+        pente = (y2-y1)/(x2-x1)
+        origine = y1 - pente*x1
+        largeur = [_ for _ in range(int(abs(pente))+e)]
 
-    if x1 < largeur and x2 < largeur and y1 < longueur and y2 < longueur:
-        if x1 == x2:
-            for i in range(y1, y2):
-                fichier[x1][i] = color
-                print(fichier[x1][i])
-                print(i)
-        elif y1 == y2:
-            for i in range(min(x1, x2), max(x1, x2)):
-                fichier[i][y1] = color
-        else:
-            i = y1
-            if x1 < x2:
-                for j in range(x1, x2, 1):
-                    fichier[i][j] = color
-                    i += 1
-            else:
-                for j in range(x1, x2, -1):
-                    fichier[i][j] = color
-                    i += 1
+        for i in range(min(x1,x2),max(x1,x2)):
+            for j in range(min(y1,y2), max(y1,y2)):
+                if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
+                    if int(pente*i - j + origine) in largeur:
+                        fichier[j+4][i] = couleur
 
 
 def determinant(vec1, vec2):
     return vec1[0]*vec2[1] - vec2[0]*vec1[1]
+
+
+def p_scalaire(vec1, vec2):
+    return vec1[0] * vec2[0] + vec1[1] * vec2[1]
+
+
+def point_inter(ligne1: tuple, ligne2: tuple):
+    dy = (ligne1[0][0] - ligne1[1][0], ligne2[0][0] - ligne2[1][0])
+    dx = (ligne1[0][1] - ligne1[1][1], ligne2[0][1] - ligne2[1][1])
+
+    denom = determinant(dy, dx)
+    if denom == 0:
+        print("IMPOSSIBLE")
+        return
+
+    det = (determinant(*ligne1), determinant(*ligne2))
+    y = determinant(det, dy) / denom
+    x = determinant(det, dx) / denom
+    return y, x
+
+def point_inter1(ligne1: tuple, ligne2: tuple):
+    if ligne1[1][0] == 0:
+        pente1 = ligne1[1][1]/10**-20
+    else:
+        pente1 = ligne1[1][1]/ligne1[1][0]
+    if ligne2[1][0] == 0:
+        pente2 = ligne2[1][1]/10**-20
+    else:
+        pente2 = ligne2[1][1]/ligne2[0][0]
+
+    w = (abs(ligne1[0][0]-ligne2[0][0]), 0)
+    coeff = p_scalaire(ligne2[1], w) / p_scalaire(ligne2[1], ligne2[1])
+    temp_y = ligne2[0][1] + coeff*ligne2[1][1]
+    #print(pente1, pente2, ligne2)
+    x = (ligne1[0][1]-temp_y)/(pente2-pente1)
+    y = pente1 * x + ligne1[0][1]
+    return y, x
 
 def polygone(fichier: list, coords: list, color: str):
     """
@@ -66,13 +99,16 @@ def polygone(fichier: list, coords: list, color: str):
     :param color: nom de la couleur utilisée pour le polygone
     :return: None
     """
-    color = rgb(color)
+
     vecteurs = [] # on a les vecteurs de chaques segment
     # rajouter le sort au cas où les points ne sont pas donnés dans l'ordre
     for i in range(len(coords) - 1):
         vecteurs.append((abs(coords[i][1]-coords[i+1][1]), abs(coords[i][0] - coords[i+1][0])))
         segment(fichier, coords[i], coords[i + 1], color)
+    vecteurs.append((abs(coords[len(coords)-1][1]-coords[0][1]), abs(coords[len(coords)-1][0] - coords[0][0])))
+    segment(fichier, coords[len(coords)-1], coords[0], color)
     print(vecteurs)
+    color = rgb(color)
 
     for i in range(1,20):
         for j in range(1, 20):
@@ -86,6 +122,7 @@ def polygone(fichier: list, coords: list, color: str):
                 break
         if not cond:
             break
+    print(vec)
 
 
 
@@ -102,42 +139,39 @@ def polygone(fichier: list, coords: list, color: str):
         if coord[1] > max_y[1]:
             max_y = coord
 
+    print(less_x, max_x, less_y, max_y)
+
     # On va ensuite utiliser une méthode pour pouvoir vérifier que le pixel parcouru est dans le polygone et donc
     # et savoir si il doit être colorié, pour ça on trace un segment(virtuel) et on compte le nombre de segments que
     # l'on rencontre si c'est impair alors on le colorie.
-    for i in range(less_y[0], max_y[0]):
-        for j in range(less_x[1], max_x[1]):
-            if fichier[i][j] != color:
-                compteur = 0
-                # TODO adapter pour éviter d'avoir un segment dans la même direction que un coté. avec des équations
+    coeff = max(abs(max_x[0] - less_x[0]), abs(max_y[1] - less_y[1]))
+    for i in range(less_y[1]+4, max_y[1]+4):
+        #print(i)
+        for j in range(less_x[0], max_x[0]):
 
-                for k in range(i, max_x[0]):
-                    if fichier[i][k] == color and fichier[i][k - 1] != color:
-                        compteur += 1
-                if compteur % 2 == 1:
-                    fichier[i][j] = color
+            if i > 3:
+                #print("hahah", i, j)
+                if fichier[i][j] != color:
+                    compteur = 0
 
-def rgb(name):
-    if name in ["blanc", "noir", "rouge", 'bleu', "vert", "jaune", "magenta", "cyan"]:
-        name.lower()
-        if name == "blanc":
-            return (255, 255, 255)
-        elif name == "noir":
-            return (0, 0, 0)
-        elif name == "rouge":
-            return (255, 0, 0)
-        elif name == "bleu":
-            return (0, 0, 255)
-        elif name == "vert":
-            return (0, 255, 0)
-        elif name == "jaune":
-            return (255, 255, 0)
-        elif name == "magenta":
-            return (255, 0, 255)
-        elif name == "cyan":
-            return (0, 255, 255)
-    else:
-        return "Le nom de la couleur n'est pas reconnu"
+                    for k in range(-1, len(vecteurs)-1):
+                        if vecteurs[k] is not None:
+                            #seg_point = (coords[k][0]+vecteurs[k][0], coords[k][1]+vecteurs[k][1])
+                            seg_point = coords[k+1]
+
+                            #inter = point_inter(((j,i), (j+coeff*vec[0], i+coeff*vec[1])), (coords[k], seg_point))
+                            #print(inter)
+                            inter = point_inter1(((i,j), vec), (coords[k], vecteurs[k]))
+                            if inter is not None:
+                                if (inter[0]+coords[k][0])**2 + (inter[1]+coords[k][1])**2 <= (coords[k][0]+seg_point[0])**2 + (coords[k][1]+seg_point[1])**2:
+                                    #if (inter[0]-i)/vec[0] >= 0 and (inter[0]-coords[k][0])/max(vecteurs[k][0], vecteurs[k][1]) > 0:
+                                    compteur += 1
+                    print(compteur)
+                    if compteur % 2 == 1:
+                        fichier[i][j] = color
+
+
+
 
 
 def createfile(x, y):
@@ -150,8 +184,11 @@ def createfile(x, y):
 # TODO La fonction dans laquelle on passe en paramètre une liste de formes et on les ajoute au fichier
 # TODO faut aussi qu'on bascule toutes les fonctions de formes dans le fichier fonctions pour clear le main
 
-Fichier = createfile(1024, 1024)
-cercle(Fichier, (512, 206), 200, "blanc")
+Fichier = createfile(300, 300)
+print(len(Fichier), len(Fichier[5]))
+#cercle(Fichier, (512, 206), 200, "blanc")
+polygone(Fichier, [(100,100), (200,100), (200,200), (100,200)], "rouge")
+#segment(Fichier, (100,100), (200,100), "rouge")
 
 with open('output.ppm', 'w') as f:
     for i in range(4):
