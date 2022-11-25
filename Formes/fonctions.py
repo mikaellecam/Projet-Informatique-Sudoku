@@ -18,7 +18,10 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
             if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
                 if sqrt((x - i) ** 2 + (y - j) ** 2) <= rayon:
                     fichier[i][j] = color
-                    #print(fichier[i][j])
+
+
+#TODO: ajouter le fonction de Numa (rectangle)
+
 
 def segment(fichier, point1, point2, color='blanc',e=1):
     """
