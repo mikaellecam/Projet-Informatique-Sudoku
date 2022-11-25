@@ -79,10 +79,14 @@ def segment_test(fichier, point1, point2, color='blanc',e=1):
     if abs(x2) == abs(x1):
         for j in range(min(y1,y2), max(y1,y2)):
                 fichier[j+4][x1] = couleur
+                for k in range(e):
+                    fichier[j+4][x1+k] = couleur
     elif abs(y2) == abs(y1):
         for i in range(min(x1,x2),max(x1,x2)):
                 if 0<=i<int(fichier[1][0]):
                     fichier[y1+4][i] = couleur
+                    for k in range(e):
+                        fichier[y1+4+k][i] = couleur
     else:
         pente = (y2-y1)/(x2-x1)
         origine = y1 - pente*x1
@@ -98,11 +102,11 @@ def segment_test(fichier, point1, point2, color='blanc',e=1):
 
 Fichier = createfile(1024,1024)
 
-segment_test(Fichier,(120,120),(120,600),"rouge",9)
+segment_test(Fichier,(120,120),(120,600),"rouge")
 
-segment_test(Fichier,(120,120),(250,120),"rouge")
+segment_test(Fichier,(120,120),(250,120),"rouge",40)
 
-segment_test(Fichier,(1000,120),(400,600),"rouge",9)
+segment_test(Fichier,(1000,120),(400,600),"rouge")
 
 
 with open('Formes\output.ppm', 'w') as f:
