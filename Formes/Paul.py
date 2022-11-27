@@ -195,6 +195,7 @@ def polygone(fichier: list, coords: list, color: str):
                                 inters.append(inter)
                     """if 154 <= i <= 202 and 154 <= j <= 202:
                         print(compteur)"""
+
                     if compteur % 2 == 1:
                         fichier[i][j] = color
                         #print(i,j,fichier[i][j])
