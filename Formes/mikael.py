@@ -91,6 +91,7 @@ def segment(fichier, point1, point2, color='blanc',e=1):
         pente = (y2-y1)/(x2-x1)
         origine = y1 - pente*x1
         largeur = [_ for _ in range(int(abs(pente))+e)]
+        print(largeur)
 
         for i in range(min(x1,x2),max(x1,x2)):
             for j in range(min(y1,y2), max(y1,y2)):
@@ -104,9 +105,12 @@ Fichier = createfile(1024,1024)
 
 segment(Fichier,(120,120),(120,600),"rouge")
 
-segment(Fichier,(120,120),(250,120),"rouge")
+segment(Fichier,(120,120),(250,120),"rouge",7)
 
-segment(Fichier,(1000,120),(400,600),"rouge")
+segment(Fichier,(440,120),(400,600),"rouge",7)
+rectangle(Fichier,(120,120),(400,250),'magenta')
+
+cercle(Fichier,(400,500),300,"bleu")
 
 
 with open('Formes\output.ppm', 'w') as f:
