@@ -1,26 +1,30 @@
 def rgb(name):
-    if name in ["blanc", "noir", "rouge",'bleu',"vert","jaune","magenta","cyan"]:
-        name.lower()
-        if name == "blanc":
-            return (255,255,255)
-        elif name == "noir":
-            return (0,0,0)
-        elif name == "rouge":
-            return (255,0,0)
-        elif name == "bleu":
-            return (0,0,255)
-        elif name == "vert":
-            return (0,255,0)
-        elif name == "jaune":
-            return (255,255,0)
-        elif name == "magenta":
-            return (255,0,255)
-        elif name == "cyan":
-            return (0,255,255)
-    else:
-        return "Le nom de la couleur n'est pas reconnu"
+    if type(name) == str:
+        if name in ["blanc", "noir", "rouge",'bleu',"vert","jaune","magenta","cyan"]:
+            name.lower()
+            if name == "blanc":
+                return (255,255,255)
+            elif name == "noir":
+                return (0,0,0)
+            elif name == "rouge":
+                return (255,0,0)
+            elif name == "bleu":
+                return (0,0,255)
+            elif name == "vert":
+                return (0,255,0)
+            elif name == "jaune":
+                return (255,255,0)
+            elif name == "magenta":
+                return (255,0,255)
+            elif name == "cyan":
+                return (0,255,255)
+            else:
+                return "Le nom de la couleur n'est pas reconnu"
+    elif type(name)==tuple and len(name)==3:
+        return name
+    else: return "La couleur n'est pas reconnue"
 def createfile(x,y):
-    File = [["P3"], [str(x)], [str(y)], ["255"]]
+    File = ["P3", str(x), str(y), "255"]
     F=[]
     for i in range(x):
         F.append([rgb("noir")]*y)
