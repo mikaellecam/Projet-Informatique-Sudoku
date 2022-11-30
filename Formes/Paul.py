@@ -91,10 +91,11 @@ def point_inter1(point, vec, point1, vec1):
     #print(pente2*11)
     #print(pente2, pente1, vec, vec1)
     x = (point[1] - temp_y) / (pente2 - pente1)
-    y = pente1 * x + point[0]
-    #if pente2 != 0:
-     #   return x + point[1], y
-    return y, x + point[1]
+    # print(x, point[1]-temp_y, pente2-pente1)
+    y = point[1] + pente1 * x
+    # if pente2 != 0:
+    #   return x + point[1], y
+    return x + point[0] +1*(vec1[0] < 0 and vec1[1] < 0), y
 
 
 def polygone(fichier: list, coords: list, color: str):
@@ -146,7 +147,7 @@ def polygone(fichier: list, coords: list, color: str):
         if coord[1] > max_y[1]:
             max_y = coord
 
-    #print(less_x, max_x, less_y, max_y)
+    print(less_x, max_x, less_y, max_y)
 
     # On va ensuite utiliser une méthode pour pouvoir vérifier que le pixel parcouru est dans le polygone et donc
     # et savoir si il doit être colorié, pour ça on trace un segment(virtuel) et on compte le nombre de segments que
@@ -157,13 +158,17 @@ def polygone(fichier: list, coords: list, color: str):
         for j in range(less_x[0], max_x[0]):
 
             if i > 3:
-                #print("hahah", i, j)
+                if i == 199 + 4 and j == 101:
+                    print("hahah", i, j, fichier[i][j])
                 if fichier[i][j] != color:
                     compteur = 0
                     inters = []
-                    """if 154 <= i <= 202 and 154 <= j <= 202:
+                    if 180 <= i <= 190 and 210 <= j <= 220:
                         print("~~~~~~~~~~~~~~")
-                        print(j, i)"""
+                        print(j, i)
+                    if i == 199+4 and j == 101:
+                        print("~~~~~~~~~~~~~~")
+                        print(j, i)
                     for k in range(-1, len(vecteurs)-1):
                         if vecteurs[k] is not None:
                             seg_point = coords[k+1]
@@ -171,34 +176,47 @@ def polygone(fichier: list, coords: list, color: str):
                                 inter = point_inter1((j,i), vec, coords[k], vecteurs[k])
                             else:
                                 inter = point_inter1((j,i-4), vec, coords[k], vecteurs[k])
-                            """if 154 <= i <= 202 and 154 <= j <= 202:
+                            if 180 <= i <= 190 and 210 <= j <= 220:
 
-                                print("inter: ",inter)"""
+                                print("inter: ",inter)
+                            if i == 199+4 and j == 101:
+                                print(inter, "zerzer")
 
                             if inter is not None:
-                                """ if 154 <= i <= 202 and 154 <= j <= 202:
+                                if 180 <= i <= 190 and 210 <= j <= 220:
                                     print("hgh", coords[k], seg_point, vecteurs[k])
-                                    print(i <= max_y[1])"""
+                                    print(i <= max_y[1])
                                 inf = (min(coords[k][0], seg_point[0]), min(coords[k][1], seg_point[1]))
                                 sup = (max(coords[k][0], seg_point[0]), max(coords[k][1], seg_point[1]))
                                 if inf[0] <= inter[0] <= sup[0] and inf[1] <= inter[1] <= sup[1]:
+                                    if i == 199+4 and j == 101:
+                                        print(inf[1], inter[1], sup[1])
                                     if vecteurs[k][0] <= 0 and vecteurs[k][1] <= 0:
                                         temp_coeff = -1
                                     else:
                                         temp_coeff = 1
-
+                                    if i == 199 + 4 and j == 101:
+                                        print(inter[0] - j, inter[1] - i + 4 * (i > max_y[1]), inter, i)
                                     #if sup[0] >= inter[0]-(inf[0])*temp_coeff >= 0 and sup[1] >= inter[1]-(inf[1])*temp_coeff >= 0 and inter not in inters:
-                                    if inter[0] - j >= 0 and inter[1]-i + 4*(i > max_y[1]) >= 0 and inter not in inters:
-                                        """if 154 <= i <= 130 and 154 <= j <= 202:
-                                            print("drrereerer")"""
+                                    if inter[0] - j >= -0.75 and inter[1]-i + 4 >= 0 and inter not in inters:
+                                        if i == 199+4 and j == 101:
+                                            print(inter[0] - j, inter[1]-i + 4, inter)
+                                        if 180 <= i <= 190 and 210 <= j <= 220:
+                                            print("drrereerer")
                                         compteur += 1
+
                                 inters.append(inter)
-                    """if 154 <= i <= 202 and 154 <= j <= 202:
-                        print(compteur)"""
+                    if 180 <= i <= 190 and 210 <= j <= 220:
+                        print(compteur)
+                    if i == 199+4 and j == 101:
+                        print(compteur)
 
                     if compteur % 2 == 1:
                         fichier[i][j] = color
                         #print(i,j,fichier[i][j])
+                        if i == 199+4 and j == 101:
+                            print(fichier[i][j])
+    segment(Fichier, (155, 157), (155*vec[0]*20, 157*vec[1]*20), "bleu")
 
 
 
@@ -210,9 +228,6 @@ def createfile(x, y):
         File.append([rgb("noir")] * x)
     return File
 
-
-# TODO La fonction dans laquelle on passe en paramètre une liste de formes et on les ajoute au fichier
-# TODO faut aussi qu'on bascule toutes les fonctions de formes dans le fichier fonctions pour clear le main
 
 Fichier = createfile(600, 300)
 print(len(Fichier), len(Fichier[5]))
