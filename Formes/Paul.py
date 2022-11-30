@@ -1,4 +1,4 @@
-from random  import randint
+from math import sqrt
 from fonctions import *
 
 
@@ -84,18 +84,23 @@ def point_inter1(point, vec, point1, vec1):
         pente2 = vec1[1] / vec1[0]
 
 
-    temp_y = point1[1] + (point[0]-point1[0])*pente2
-    #print(temp_y, coeff, point1[0], vec1, point[0] + coeff*vec1[1], w)
-    #print(point1[0]+point[0]-point1[0])
-    #print(point1[1] + (point[0]-point1[0])*pente2)
-    #print(pente2*11)
-    #print(pente2, pente1, vec, vec1)
-    x = (point[1] - temp_y) / (pente2 - pente1)
+    temp_y = point1[1] + (point[0]-point1[0])*pente2 #+ 4 #+ 4*(abs(-point[0]*pente2 + point[1] - (point1[1] + pente2*-point1[0]))/sqrt(1+pente2**2) < 2)
+    if point == (145, 251):
+        print('<<<<<<<<<<<<<<<')
+        print(temp_y)
+        print(pente2, pente1, vec, vec1)
+    x = (point[1]-4 - temp_y) / (pente2 - pente1)
+    if point == (145, 251):
+        print(x)
+        print(point[1] - 4 - temp_y, pente2 - pente1)
+    #if vec1[0] < 0 and vec1[1] < 0:
+     #   x = -x
     # print(x, point[1]-temp_y, pente2-pente1)
-    y = point[1] + pente1 * x
+    y = point[1]-4 + pente1 * x
     # if pente2 != 0:
     #   return x + point[1], y
-    return x + point[0] +1*(vec1[0] < 0 and vec1[1] < 0), y
+    return x + point[0] , y
+    #+ 1*(vec1[0] < 0 and vec1[1] < 0)
 
 
 def polygone(fichier: list, coords: list, color: str):
@@ -158,65 +163,72 @@ def polygone(fichier: list, coords: list, color: str):
         for j in range(less_x[0], max_x[0]):
 
             if i > 3:
-                if i == 199 + 4 and j == 101:
-                    print("hahah", i, j, fichier[i][j])
+                """if i == 247 + 4 and j == 145:
+                    print("hahah", i, j, fichier[i][j])"""
                 if fichier[i][j] != color:
                     compteur = 0
                     inters = []
-                    if 180 <= i <= 190 and 210 <= j <= 220:
+                    """if 180 <= i <= 190 and 210 <= j <= 220:
                         print("~~~~~~~~~~~~~~")
                         print(j, i)
-                    if i == 199+4 and j == 101:
+                    if i == 247 + 4 and j == 145:
                         print("~~~~~~~~~~~~~~")
-                        print(j, i)
+                        print(j, i)"""
                     for k in range(-1, len(vecteurs)-1):
                         if vecteurs[k] is not None:
                             seg_point = coords[k+1]
                             if i <= max_y[1]:
                                 inter = point_inter1((j,i), vec, coords[k], vecteurs[k])
                             else:
-                                inter = point_inter1((j,i-4), vec, coords[k], vecteurs[k])
-                            if 180 <= i <= 190 and 210 <= j <= 220:
+                                inter = point_inter1((j,i), vec, coords[k], vecteurs[k])
+                            """if 180 <= i <= 190 and 210 <= j <= 220:
 
-                                print("inter: ",inter)
-                            if i == 199+4 and j == 101:
-                                print(inter, "zerzer")
+                                print("inter: ",inter)"""
+                            if i == 198 + 4 and j == 98:
+                                print(inter, vecteurs[k], coords[k], seg_point)
 
                             if inter is not None:
-                                if 180 <= i <= 190 and 210 <= j <= 220:
+                                """if 180 <= i <= 190 and 210 <= j <= 220:
                                     print("hgh", coords[k], seg_point, vecteurs[k])
-                                    print(i <= max_y[1])
+                                    print(i <= max_y[1])"""
                                 inf = (min(coords[k][0], seg_point[0]), min(coords[k][1], seg_point[1]))
                                 sup = (max(coords[k][0], seg_point[0]), max(coords[k][1], seg_point[1]))
+                                """if i == 247 + 4 and j == 145:
+                                    print(inf,sup, inf[0] <= inter[0] <= sup[0], inf[1] <= inter[1] <= sup[1], (coords[k], seg_point))
+                                """
+                                if i == 198 + 4 and j == 98:
+                                    print(inf, sup)
                                 if inf[0] <= inter[0] <= sup[0] and inf[1] <= inter[1] <= sup[1]:
-                                    if i == 199+4 and j == 101:
-                                        print(inf[1], inter[1], sup[1])
+                                    """if i == 247 + 4 and j == 145:
+                                        print(inf[1], inter[1], sup[1])"""
                                     if vecteurs[k][0] <= 0 and vecteurs[k][1] <= 0:
                                         temp_coeff = -1
                                     else:
                                         temp_coeff = 1
-                                    if i == 199 + 4 and j == 101:
-                                        print(inter[0] - j, inter[1] - i + 4 * (i > max_y[1]), inter, i)
+                                    """if i == 247 + 4 and j == 145:
+                                        print(inter[0] - j, inter[1] - i + 4 * (i > max_y[1]), inter, i)"""
                                     #if sup[0] >= inter[0]-(inf[0])*temp_coeff >= 0 and sup[1] >= inter[1]-(inf[1])*temp_coeff >= 0 and inter not in inters:
+                                    if i == 198 + 4 and j == 98:
+                                        print(inter in inters)
                                     if inter[0] - j >= -0.75 and inter[1]-i + 4 >= 0 and inter not in inters:
-                                        if i == 199+4 and j == 101:
-                                            print(inter[0] - j, inter[1]-i + 4, inter)
-                                        if 180 <= i <= 190 and 210 <= j <= 220:
-                                            print("drrereerer")
+                                        #if i == 198 + 4 and j == 98:
+                                         #   print(inter in inters)
+                                        """if 180 <= i <= 190 and 210 <= j <= 220:
+                                            print("drrereerer")"""
                                         compteur += 1
 
                                 inters.append(inter)
-                    if 180 <= i <= 190 and 210 <= j <= 220:
-                        print(compteur)
-                    if i == 199+4 and j == 101:
+                    """if 180 <= i <= 190 and 210 <= j <= 220:
+                        print(compteur)"""
+                    if i == 198 + 4 and j == 98:
                         print(compteur)
 
                     if compteur % 2 == 1:
                         fichier[i][j] = color
                         #print(i,j,fichier[i][j])
-                        if i == 199+4 and j == 101:
-                            print(fichier[i][j])
-    segment(Fichier, (155, 157), (155*vec[0]*20, 157*vec[1]*20), "bleu")
+                        """if i == 247+4 and j == 145:
+                            print(fichier[i][j])"""
+    segment(Fichier, (145, 247), (155*vec[0]*20, 157*vec[1]*20), "bleu")
 
 
 
@@ -233,7 +245,7 @@ Fichier = createfile(600, 300)
 print(len(Fichier), len(Fichier[5]))
 #cercle(Fichier, (512, 206), 200, "blanc")
 #polygone(Fichier, [(150,100), (200,200), (100,200)], "rouge")
-polygone(Fichier, [(100,100), (200,100), (200,200), (150,250), (100,200)], "rouge")
+polygone(Fichier, [(100,100),(150, 75), (200,100), (225,150),(200,200), (150,225), (100,200), (75,150)], "vert")
 #print(point_inter1((166,143), (19,19)), ())
 #segment(Fichier, (100,100), (200,100), "rouge")
 
