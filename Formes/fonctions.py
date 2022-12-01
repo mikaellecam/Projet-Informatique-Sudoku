@@ -183,6 +183,18 @@ def polygone(fichier: list, coords: list, color: str):
                     if compteur % 2 == 1:
                         fichier[i][j] = color
 
+def ellipse(fichier, centre: tuple, grand, petit: float, color):
+    
+    color = rgb(color)
+    cx,cy=centre
+    for x in range(cx-grand,cx+grand):
+        for y in range(cy-petit,cy+petit):
+            verif= ((x-cx)**2)/(grand**2) + (((y-cy)**2)/(petit**2))
+            print(verif)
+            if 0 <= y < int(fichier[2][0]) and 0 <= x < int(fichier[1][0]):
+                if (verif <= 1):
+                    fichier[x][y]=color
+
 def rgb(name):
     """
     Fonction qui prends en paramètre un nom de couleur et la convertis en un tuple (red,green,blue)
