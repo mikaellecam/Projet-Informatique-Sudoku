@@ -1,4 +1,3 @@
-from math import sqrt
 from fonctions import *
 
 
@@ -59,20 +58,6 @@ def p_scalaire(vec1, vec2):
     return vec1[0] * vec2[0] + vec1[1] * vec2[1]
 
 
-def point_inter(ligne1: tuple, ligne2: tuple):
-    dy = (ligne1[0][0] - ligne1[1][0], ligne2[0][0] - ligne2[1][0])
-    dx = (ligne1[0][1] - ligne1[1][1], ligne2[0][1] - ligne2[1][1])
-
-    denom = determinant(dy, dx)
-    if denom == 0:
-        print("IMPOSSIBLE")
-        return
-
-    det = (determinant(*ligne1), determinant(*ligne2))
-    y = determinant(det, dy) / denom
-    x = determinant(det, dx) / denom
-    return y, x
-
 def point_inter1(point, vec, point1, vec1):
     if vec[0] == 0:
         pente1 = vec[1]/10**-20
@@ -85,20 +70,9 @@ def point_inter1(point, vec, point1, vec1):
 
 
     temp_y = point1[1] + (point[0]-point1[0])*pente2 #+ 4 #+ 4*(abs(-point[0]*pente2 + point[1] - (point1[1] + pente2*-point1[0]))/sqrt(1+pente2**2) < 2)
-    if point == (145, 251):
-        print('<<<<<<<<<<<<<<<')
-        print(temp_y)
-        print(pente2, pente1, vec, vec1)
     x = (point[1]-4 - temp_y) / (pente2 - pente1)
-    if point == (145, 251):
-        print(x)
-        print(point[1] - 4 - temp_y, pente2 - pente1)
-    #if vec1[0] < 0 and vec1[1] < 0:
-     #   x = -x
-    # print(x, point[1]-temp_y, pente2-pente1)
     y = point[1]-4 + pente1 * x
-    # if pente2 != 0:
-    #   return x + point[1], y
+
     return x + point[0] , y
     #+ 1*(vec1[0] < 0 and vec1[1] < 0)
 
@@ -119,7 +93,7 @@ def polygone(fichier: list, coords: list, color: str):
         segment(fichier, coords[i], coords[i + 1], color)
     vecteurs.append((coords[0][0]-coords[len(coords)-1][0], coords[0][1] - coords[len(coords)-1][1]))
     segment(fichier, coords[len(coords)-1], coords[0], color)
-    print(vecteurs)
+
     color = rgb(color)
 
     for i in range(1,20):
@@ -135,10 +109,6 @@ def polygone(fichier: list, coords: list, color: str):
                 break
         if not cond:
             break
-    print(vec, cond)
-
-
-
     # On détermine les coordonnées des extrémitées pour ensuite parcourir tous les pixels du polygone
     # et identifier ceux que l'on veut modifier
     less_x, max_x, less_y, max_y = [coords[0]] * 4
@@ -157,23 +127,12 @@ def polygone(fichier: list, coords: list, color: str):
     # On va ensuite utiliser une méthode pour pouvoir vérifier que le pixel parcouru est dans le polygone et donc
     # et savoir si il doit être colorié, pour ça on trace un segment(virtuel) et on compte le nombre de segments que
     # l'on rencontre si c'est impair alors on le colorie.
-    coeff = max(abs(max_x[0] - less_x[0]), abs(max_y[1] - less_y[1]))
     for i in range(less_y[1]+4, max_y[1]+4):
-        #print(i)
         for j in range(less_x[0], max_x[0]):
-
             if i > 3:
-                """if i == 247 + 4 and j == 145:
-                    print("hahah", i, j, fichier[i][j])"""
                 if fichier[i][j] != color:
                     compteur = 0
                     inters = []
-                    """if 180 <= i <= 190 and 210 <= j <= 220:
-                        print("~~~~~~~~~~~~~~")
-                        print(j, i)
-                    if i == 247 + 4 and j == 145:
-                        print("~~~~~~~~~~~~~~")
-                        print(j, i)"""
                     for k in range(-1, len(vecteurs)-1):
                         if vecteurs[k] is not None:
                             seg_point = coords[k+1]
@@ -181,57 +140,32 @@ def polygone(fichier: list, coords: list, color: str):
                                 inter = point_inter1((j,i), vec, coords[k], vecteurs[k])
                             else:
                                 inter = point_inter1((j,i), vec, coords[k], vecteurs[k])
-                            """if 180 <= i <= 190 and 210 <= j <= 220:
-
-                                print("inter: ",inter)"""
-                            if i == 198 + 4 and j == 98:
-                                print(inter, vecteurs[k], coords[k], seg_point)
 
                             if inter is not None:
-                                """if 180 <= i <= 190 and 210 <= j <= 220:
-                                    print("hgh", coords[k], seg_point, vecteurs[k])
-                                    print(i <= max_y[1])"""
                                 inf = (min(coords[k][0], seg_point[0]), min(coords[k][1], seg_point[1]))
                                 sup = (max(coords[k][0], seg_point[0]), max(coords[k][1], seg_point[1]))
-                                """if i == 247 + 4 and j == 145:
-                                    print(inf,sup, inf[0] <= inter[0] <= sup[0], inf[1] <= inter[1] <= sup[1], (coords[k], seg_point))
-                                """
-                                if i == 198 + 4 and j == 98:
-                                    print(inf, sup)
-                                if inf[0] <= inter[0] <= sup[0] and inf[1] <= inter[1] <= sup[1]:
-                                    """if i == 247 + 4 and j == 145:
-                                        print(inf[1], inter[1], sup[1])"""
-                                    if vecteurs[k][0] <= 0 and vecteurs[k][1] <= 0:
-                                        temp_coeff = -1
-                                    else:
-                                        temp_coeff = 1
-                                    """if i == 247 + 4 and j == 145:
-                                        print(inter[0] - j, inter[1] - i + 4 * (i > max_y[1]), inter, i)"""
-                                    #if sup[0] >= inter[0]-(inf[0])*temp_coeff >= 0 and sup[1] >= inter[1]-(inf[1])*temp_coeff >= 0 and inter not in inters:
-                                    if i == 198 + 4 and j == 98:
-                                        print(inter in inters)
+
+                                ###################################
+                                if inter in inters  and inter[0] - j >= -0.75 and inter[1]-i + 4 >= 0:
+                                    cond_temp = False
+                                    for p in inters:
+                                        if j - p[0] > 0 and i -4-p[1] > 0:
+                                            if p[0] < inter[0] and p[1] < inter[1] and determinant(vec, (inter[0]-p[0],
+                                                                                                         inter[1]-p[1])) <1:
+                                                if less_x[0] <= p[0] <= max_x[0] and less_y[1] <= p[1] <= max_y[1]:
+                                                    cond_temp = True
+                                                    break
+                                    if not cond_temp:
+                                        compteur += 1
+                                ##################################
+                                elif inf[0] <= inter[0] <= sup[0] and inf[1] <= inter[1] <= sup[1]:
                                     if inter[0] - j >= -0.75 and inter[1]-i + 4 >= 0 and inter not in inters:
-                                        #if i == 198 + 4 and j == 98:
-                                         #   print(inter in inters)
-                                        """if 180 <= i <= 190 and 210 <= j <= 220:
-                                            print("drrereerer")"""
                                         compteur += 1
 
-                                inters.append(inter)
-                    """if 180 <= i <= 190 and 210 <= j <= 220:
-                        print(compteur)"""
-                    if i == 198 + 4 and j == 98:
-                        print(compteur)
+                                    inters.append(inter)
 
                     if compteur % 2 == 1:
                         fichier[i][j] = color
-                        #print(i,j,fichier[i][j])
-                        """if i == 247+4 and j == 145:
-                            print(fichier[i][j])"""
-    segment(Fichier, (145, 247), (155*vec[0]*20, 157*vec[1]*20), "bleu")
-
-
-
 
 
 def createfile(x, y):
@@ -242,12 +176,8 @@ def createfile(x, y):
 
 
 Fichier = createfile(600, 300)
-print(len(Fichier), len(Fichier[5]))
-#cercle(Fichier, (512, 206), 200, "blanc")
-#polygone(Fichier, [(150,100), (200,200), (100,200)], "rouge")
-polygone(Fichier, [(100,100),(150, 75), (200,100), (225,150),(200,200), (150,225), (100,200), (75,150)], "vert")
-#print(point_inter1((166,143), (19,19)), ())
-#segment(Fichier, (100,100), (200,100), "rouge")
+
+polygone(Fichier, [(100,100),(150, 75), (200,100), (225,150),(200,200), (100,200), (75,150)], "cyan")
 
 with open('output.ppm', 'w') as f:
     for i in range(4):
