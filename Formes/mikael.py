@@ -30,6 +30,20 @@ def rgb(name):
         print("Le nom de la couleur n'est pas reconnu")
         return (0,0,0)
 
+def colormixer(color1,color2):
+    r1,g1,b1 = color1
+    r2,g2,b2 = color2
+    r3,g3,b3 = 0,0,0
+    if r1-r2 == 0:
+        r3 = 255
+    if g1-g2 == 0:
+        g3 = 255
+    if b1-b2 == 0:
+        b3 = 255
+    return (r3,g3,b3)
+
+print(colormixer(rgb("magenta"),rgb("jaune")))
+
 def cercle(fichier, coords: tuple, rayon: float, color: str):
     """
     fonction permettant de rajouter un cercle de centre coords et d'un certain rayon, avec une certaine couleur
@@ -77,12 +91,12 @@ def segment(fichier, point1, point2, color='blanc',e=1):
     x2,y2 = point2
 
     if abs(x2) == abs(x1):
-        for j in range(min(y1,y2), max(y1,y2)):
+        for j in range(min(y1,y2), max(y1,y2)+1):
                 fichier[j+4][x1] = couleur
                 for k in range(e):
                     fichier[j+4][x1+k] = couleur
     elif abs(y2) == abs(y1):
-        for i in range(min(x1,x2),max(x1,x2)):
+        for i in range(min(x1,x2),max(x1,x2)+1):
                 if 0<=i<int(fichier[1][0]):
                     fichier[y1+4][i] = couleur
                     for k in range(e):
@@ -93,8 +107,8 @@ def segment(fichier, point1, point2, color='blanc',e=1):
         largeur = [_ for _ in range(int(abs(pente))+e)]
         print(largeur)
 
-        for i in range(min(x1,x2),max(x1,x2)):
-            for j in range(min(y1,y2), max(y1,y2)):
+        for i in range(min(x1,x2),max(x1,x2)+1):
+            for j in range(min(y1,y2), max(y1,y2)+1):
                 if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
                     if int(pente*i - j + origine) in largeur:
                         fichier[j+4][i] = couleur
@@ -103,14 +117,13 @@ def segment(fichier, point1, point2, color='blanc',e=1):
 
 Fichier = createfile(1024,1024)
 
-segment(Fichier,(120,120),(120,600),"rouge")
+segment(Fichier,(100,100),(200,100),"rouge")
 
-segment(Fichier,(120,120),(250,120),"rouge",7)
+segment(Fichier,(100,200),(100,100),"rouge")
 
-segment(Fichier,(440,120),(400,600),"rouge",7)
-rectangle(Fichier,(120,120),(400,250),'magenta')
+segment(Fichier,(100,200),(200,200),"rouge")
 
-cercle(Fichier,(400,500),300,"bleu")
+segment(Fichier,(200,200),(200,100),'magenta')
 
 
 with open('Formes\output.ppm', 'w') as f:
