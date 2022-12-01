@@ -18,7 +18,7 @@ def main(Fichier ,forme : list,) :
             a = float(input('coord1'))
             b = float(input('coord2'))
             c = rgb(str(input('rgb')))
-            segements(Fichier,a,b,c)
+            segment(Fichier,a,b,c)
         
         elif forme[index] == 'polygone' : 
             a = float(input('coord'))

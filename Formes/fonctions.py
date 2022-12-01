@@ -83,7 +83,27 @@ def rgb(name):
     else:
         print("Le nom de la couleur n'est pas reconnu")
         return (0,0,0)
-        
+
+def colormixer(color1,color2):
+    r1,g1,b1 = rgb(color1)
+    r2,g2,b2 = rgb(color2)
+    r3,g3,b3 = 0,0,0
+
+    if color1 and color2 in ["rouge","vert",'bleu']:
+        return (r1+r2,g1+g2,b1+b2)
+    elif color1 and color2 in ["magenta","cyan","jaune"]:
+        if r1 == 255 and r2 == 255:
+            r3 = 255
+        if g1 == 255 and g2 == 255:
+            g3 = 255
+        if b1 == 255 and b2 == 255:
+            b3 = 255
+        return (r3,g3,b3)
+    else:
+        return (int((r1+r2)/2),int((g1+g2)/2),int((b1+b2)/2))
+
+
+
 def createfile(x,y):
     File = [["P3"], [str(x)], [str(y)], ["255"]]
     for i in range(x):
