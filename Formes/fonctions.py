@@ -1,4 +1,3 @@
-from math import *
 
 def cercle(fichier, coords: tuple, rayon: float, color: str):
     """
@@ -16,7 +15,7 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
     for i in range(x - rayon, x + rayon):
         for j in range(y - rayon, y + rayon):
             if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
-                if sqrt((x - i) ** 2 + (y - j) ** 2) <= rayon:
+                if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
                     fichier[i][j] = color
 
 
@@ -57,6 +56,124 @@ def segment(fichier, point1, point2, color='blanc',e=1):
                 if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
                     if int(pente*i - j + origine) in largeur:
                         fichier[j+4][i] = couleur
+
+
+def determinant(vec1, vec2):
+    return vec1[0]*vec2[1] - vec2[0]*vec1[1]
+
+
+def p_scalaire(vec1, vec2):
+    return vec1[0] * vec2[0] + vec1[1] * vec2[1]
+
+
+def point_inter1(point, vec, point1, vec1):
+    if vec[0] == 0:
+        pente1 = vec[1]/10**-20
+    else:
+        pente1 = vec[1] / vec[0]
+    if vec1[0] == 0:
+        pente2 = vec1[1]/10**-20
+    else:
+        pente2 = vec1[1] / vec1[0]
+
+
+    temp_y = point1[1] + (point[0]-point1[0])*pente2 #+ 4 #+ 4*(abs(-point[0]*pente2 + point[1] - (point1[1] + pente2*-point1[0]))/sqrt(1+pente2**2) < 2)
+    x = (point[1]-4 - temp_y) / (pente2 - pente1)
+    y = point[1]-4 + pente1 * x
+
+    return x + point[0] , y
+    #+ 1*(vec1[0] < 0 and vec1[1] < 0)
+
+
+def polygone(fichier: list, coords: list, color: str):
+    """
+    fonction qui permet d'ajouter un polygone à n sommets, de la couleur donnée en paramètre
+    :param fichier: fichier (liste) dans lequel ajotuer le polygone
+    :param coords: liste des coordonnées des sommets du polygone (tuple[int])
+    :param color: nom de la couleur utilisée pour le polygone
+    :return: None
+    """
+
+    vecteurs = [] # on a les vecteurs de chaques segment
+    # rajouter le sort au cas où les points ne sont pas donnés dans l'ordre
+    for i in range(len(coords) - 1):
+        vecteurs.append((coords[i+1][0]-coords[i][0],coords[i+1][1] - coords[i][1]))
+        segment(fichier, coords[i], coords[i + 1], color)
+    vecteurs.append((coords[0][0]-coords[len(coords)-1][0], coords[0][1] - coords[len(coords)-1][1]))
+    segment(fichier, coords[len(coords)-1], coords[0], color)
+
+    color = rgb(color)
+
+    for i in range(1,20):
+        for j in range(1, 20):
+            vec = (i, j)
+            cond = False
+            for vec1 in vecteurs:
+                #print(determinant(vec, vec1))
+                if not determinant(vec, vec1):
+                    cond = True
+                    break
+            if not cond:
+                break
+        if not cond:
+            break
+    # On détermine les coordonnées des extrémitées pour ensuite parcourir tous les pixels du polygone
+    # et identifier ceux que l'on veut modifier
+    less_x, max_x, less_y, max_y = [coords[0]] * 4
+    for coord in coords:
+        if coord[0] < less_x[0]:
+            less_x = coord
+        if coord[0] > max_x[0]:
+            max_x = coord
+        if coord[1] < less_y[1]:
+            less_y = coord
+        if coord[1] > max_y[1]:
+            max_y = coord
+
+    print(less_x, max_x, less_y, max_y)
+
+    # On va ensuite utiliser une méthode pour pouvoir vérifier que le pixel parcouru est dans le polygone et donc
+    # et savoir si il doit être colorié, pour ça on trace un segment(virtuel) et on compte le nombre de segments que
+    # l'on rencontre si c'est impair alors on le colorie.
+    for i in range(less_y[1]+4, max_y[1]+4):
+        for j in range(less_x[0], max_x[0]):
+            if i > 3:
+                if fichier[i][j] != color:
+                    compteur = 0
+                    inters = []
+                    for k in range(-1, len(vecteurs)-1):
+                        if vecteurs[k] is not None:
+                            seg_point = coords[k+1]
+                            if i <= max_y[1]:
+                                inter = point_inter1((j,i), vec, coords[k], vecteurs[k])
+                            else:
+                                inter = point_inter1((j,i), vec, coords[k], vecteurs[k])
+
+                            if inter is not None:
+                                inf = (min(coords[k][0], seg_point[0]), min(coords[k][1], seg_point[1]))
+                                sup = (max(coords[k][0], seg_point[0]), max(coords[k][1], seg_point[1]))
+
+                                ###################################
+                                if inter in inters  and inter[0] - j >= -0.75 and inter[1]-i + 4 >= 0:
+                                    cond_temp = False
+                                    for p in inters:
+                                        if j - p[0] > 0 and i -4-p[1] > 0:
+                                            if p[0] < inter[0] and p[1] < inter[1] and determinant(vec, (inter[0]-p[0],
+                                                                                                         inter[1]-p[1])) <1:
+                                                if less_x[0] <= p[0] <= max_x[0] and less_y[1] <= p[1] <= max_y[1]:
+                                                    cond_temp = True
+                                                    break
+                                    if not cond_temp:
+                                        compteur += 1
+                                ##################################
+                                elif inf[0] <= inter[0] <= sup[0] and inf[1] <= inter[1] <= sup[1]:
+                                    if inter[0] - j >= -0.75 and inter[1]-i + 4 >= 0 and inter not in inters:
+                                        compteur += 1
+
+                                    inters.append(inter)
+
+                    if compteur % 2 == 1:
+                        fichier[i][j] = color
 
 def rgb(name):
     """
