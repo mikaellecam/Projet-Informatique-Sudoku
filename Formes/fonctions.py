@@ -18,17 +18,25 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
                 if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
                     fichier[i][j] = color
 
-def rectangle(Fichier ,cord1 , cord2 ,rgb):
-    cord1 = list(cord1) 
-    cord2 = list(cord2)
-    l = int(cord2[0]-cord1[0])
-    L = int(cord2[1]-cord1[1])
-    l= abs(l)
-    L = abs(L)
-    for index1 in range (l):
-        for index2 in range (L):
-            if 0<index1<int(Fichier[1][0]) and 0<index2<int(Fichier[2][0]):
-                Fichier[index2+4][index1] = rgb
+
+
+def rectangle(fichier,point1,point2,color):
+    """
+    Fonction permettant de rajouter un cercle basé sur deux points, le premier qui est en haut à droite et le
+    deuxième qui en bas à gauche.
+    :param fichier: fichier dans lequel on rajoute le rectangle
+    :param point: coordonnée de la valeur en haut à gauche
+    :param longueur: la longueur du rectangle
+    :param largeur: la largeur du rectangle
+    :param color: la couleur (str)
+    """
+    couleur = rgb(color)
+    x1,y1 = point1
+    x2,y2 = point2
+    for i in range(min(x1,x2),max(x1,x2)):
+        for j in range(min(y1,y2),max(y1,y2)):
+            if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
+                fichier[j+4][i] = couleur
 
 def segment(fichier, point1, point2, color='blanc',e=1):
     """
@@ -58,12 +66,15 @@ def segment(fichier, point1, point2, color='blanc',e=1):
         pente = (y2-y1)/(x2-x1)
         origine = y1 - pente*x1
         largeur = [_ for _ in range(int(abs(pente))+e)]
+        print(largeur)
 
         for i in range(min(x1,x2),max(x1,x2)):
             for j in range(min(y1,y2), max(y1,y2)):
                 if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
                     if int(pente*i - j + origine) in largeur:
                         fichier[j+4][i] = couleur
+                        for k in range(e):
+                            fichier[j+4+k][i] = couleur
 
 
 def determinant(vec1, vec2):
