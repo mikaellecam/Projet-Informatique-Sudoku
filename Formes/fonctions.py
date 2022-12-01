@@ -18,9 +18,17 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
                 if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
                     fichier[i][j] = color
 
-
-#TODO: ajouter le fonction de Numa (rectangle)
-
+def rectangle(Fichier ,cord1 , cord2 ,rgb):
+    cord1 = list(cord1) 
+    cord2 = list(cord2)
+    l = int(cord2[0]-cord1[0])
+    L = int(cord2[1]-cord1[1])
+    l= abs(l)
+    L = abs(L)
+    for index1 in range (l):
+        for index2 in range (L):
+            if 0<index1<int(Fichier[1][0]) and 0<index2<int(Fichier[2][0]):
+                Fichier[index2+4][index1] = rgb
 
 def segment(fichier, point1, point2, color='blanc',e=1):
     """
