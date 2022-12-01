@@ -11,12 +11,14 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
     x, y = coords
     color = rgb(color)
 
-    color = (str(color[0]), str(color[1]), str(color[2]))
     for i in range(x - rayon, x + rayon):
         for j in range(y - rayon, y + rayon):
             if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
                 if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
-                    fichier[i][j] = color
+                    if fichier[i][j] is not rgb("noir"):
+                        fichier[i][j] = colormixer(fichier[i][j],color)
+                    else:
+                        fichier[i][j] = color
 
 
 
@@ -36,7 +38,10 @@ def rectangle(fichier,point1,point2,color):
     for i in range(min(x1,x2),max(x1,x2)):
         for j in range(min(y1,y2),max(y1,y2)):
             if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
-                fichier[j+4][i] = couleur
+                if fichier[j+4][i] is not rgb("noir"):
+                    fichier[j+4][i] = colormixer(fichier[j+4][i],couleur)
+                else:
+                    fichier[j+4][i] = couleur
 
 def segment(fichier, point1, point2, color='blanc',e=1):
     """
@@ -233,13 +238,14 @@ def rgb(name):
         return (0,0,0)
 
 def colormixer(color1,color2):
-    r1,g1,b1 = rgb(color1)
-    r2,g2,b2 = rgb(color2)
+    r1,g1,b1 = color1
+    r2,g2,b2 = color2
     r3,g3,b3 = 0,0,0
 
-    if color1 and color2 in ["rouge","vert",'bleu']:
+    if color1 in [rgb("rouge"),rgb("vert"),rgb('bleu')] and color2 in [rgb("rouge"),rgb("vert"),rgb('bleu')]:
+        print("pass")
         return (r1+r2,g1+g2,b1+b2)
-    elif color1 and color2 in ["magenta","cyan","jaune"]:
+    elif color1 in [rgb("magenta"),rgb("cyan"),rgb("jaune")] and color2 in [rgb("magenta"),rgb("cyan"),rgb("jaune")]:
         if r1 == 255 and r2 == 255:
             r3 = 255
         if g1 == 255 and g2 == 255:

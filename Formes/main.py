@@ -29,10 +29,12 @@ def main(Fichier):
 
     
     elif forme == 'polygone' : 
-        nb = input("Nombre de points du polygone: ")
+        nb = int(input("Nombre de points du polygone: "))
         a = []
         for i in range(1,nb+1):
-            a.append(input(f"Coordonnée du Point {i}: "))
+            temp = (input(f"Coordonnée du Point {i}: ")).split(",")
+            a.append((int(temp[0]),int(temp[1])))
+            print(a)
         b = input('Couleur: ')
         polygone(Fichier,a,b)
         return main(Fichier)
