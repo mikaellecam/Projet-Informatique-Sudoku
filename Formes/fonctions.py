@@ -15,10 +15,7 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
         for j in range(y - rayon, y + rayon):
             if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
                 if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
-                    if fichier[i][j] is not rgb("noir"):
-                        fichier[i][j] = colormixer(fichier[i][j],color)
-                    else:
-                        fichier[i][j] = color
+                    fichier[i][j] = color
 
 
 
@@ -38,10 +35,7 @@ def rectangle(fichier,point1,point2,color):
     for i in range(min(x1,x2),max(x1,x2)):
         for j in range(min(y1,y2),max(y1,y2)):
             if 0<=i<int(fichier[1][0]) and 0<=j<int(fichier[2][0]):
-                if fichier[j+4][i] is not rgb("noir"):
-                    fichier[j+4][i] = colormixer(fichier[j+4][i],couleur)
-                else:
-                    fichier[j+4][i] = couleur
+                fichier[j+4][i] = couleur
 
 def segment(fichier, point1, point2, color='blanc',e=1):
     """
@@ -71,7 +65,6 @@ def segment(fichier, point1, point2, color='blanc',e=1):
         pente = (y2-y1)/(x2-x1)
         origine = y1 - pente*x1
         largeur = [_ for _ in range(int(abs(pente))+e)]
-        print(largeur)
 
         for i in range(min(x1,x2),max(x1,x2)):
             for j in range(min(y1,y2), max(y1,y2)):
@@ -154,8 +147,6 @@ def polygone(fichier: list, coords: list, color: str):
         if coord[1] > max_y[1]:
             max_y = coord
 
-    print(less_x, max_x, less_y, max_y)
-
     # On va ensuite utiliser une méthode pour pouvoir vérifier que le pixel parcouru est dans le polygone et donc
     # et savoir si il doit être colorié, pour ça on trace un segment(virtuel) et on compte le nombre de segments que
     # l'on rencontre si c'est impair alors on le colorie.
@@ -199,14 +190,13 @@ def polygone(fichier: list, coords: list, color: str):
                     if compteur % 2 == 1:
                         fichier[i][j] = color
 
-def ellipse(fichier, centre: tuple, grand, petit: float, color):
+def ellipse(fichier, centre: tuple, vertical, horizontal: float, color):
     
     color = rgb(color)
     cx,cy=centre
-    for x in range(cx-grand,cx+grand):
-        for y in range(cy-petit,cy+petit):
-            verif= ((x-cx)**2)/(grand**2) + (((y-cy)**2)/(petit**2))
-            print(verif)
+    for x in range(cx-vertical,cx+vertical):
+        for y in range(cy-horizontal,cy+horizontal):
+            verif= ((x-cx)**2)/(vertical**2) + (((y-cy)**2)/(horizontal**2))
             if 0 <= y < int(fichier[2][0]) and 0 <= x < int(fichier[1][0]):
                 if (verif <= 1):
                     fichier[x][y]=color
@@ -256,7 +246,58 @@ def colormixer(color1,color2):
     else:
         return (int((r1+r2)/2),int((g1+g2)/2),int((b1+b2)/2))
 
+def main(Fichier):
+    forme = input("Quelle forme voulez vous parmis: rectangle, ellipse, cercle, segment, polygone: ")
+    print("Rentrez les coordonnées comme ceci: x,y.")
+    if forme == 'rectangle':
+        a = input('1er Point: ').split(","); a = (int(a[0]),int(a[1]))
+        b = input('2e Point: ').split(","); b= (int(b[0]),int(b[1]))
+        c = input('Couleur: ')
+        rectangle(Fichier,a,b,c)
+        return main(Fichier)
 
+
+    elif forme == 'cercle': 
+        a = input('Point de centre: ').split(","); a = (int(a[0]),int(a[1]))
+        b = int(input('Rayon: '))
+        c = input('Couleur: ')
+        cercle(Fichier,a,b,c)
+        return main(Fichier)
+
+
+    elif forme == 'segment' :
+        a = input('1er Point: ').split(","); a = (int(a[0]),int(a[1]))
+        b = input('2e Point: ').split(","); b = (int(b[0]),int(b[1]))
+        l = int(input("Largeur du segment (valeur de défaut = 1): "))
+        c = input('Couleur: ')
+        segment(Fichier,a,b,c,l)
+        return main(Fichier)
+
+    
+    elif forme == 'polygone' : 
+        nb = int(input("Nombre de points du polygone: "))
+        a = []
+        for i in range(1,nb+1):
+            temp = (input(f"Coordonnée du Point {i}: ")).split(",")
+            a.append((int(temp[0]),int(temp[1])))
+            print(a)
+        b = input('Couleur: ')
+        polygone(Fichier,a,b)
+        return main(Fichier)
+    
+    elif forme == "ellipse":
+        a = input("Point de centre: ").split(","); a = (int(a[0]),int(a[1]))
+        b = int(input("Rayon vertical: "))
+        c = int(input('Rayon horizontal: '))
+        d = input("Couleur: ")
+        ellipse(Fichier,a,b,c,d)
+        return main(Fichier)
+    
+    elif forme == "":
+        return None
+    else:
+        print("La forme n'est pas reconnue!")
+        return main(Fichier)
 
 def createfile(x,y):
     File = [["P3"], [str(x)], [str(y)], ["255"]]

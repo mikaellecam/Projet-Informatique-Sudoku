@@ -1,62 +1,9 @@
 from fonctions import *
 
-def main(Fichier):
-    forme = input("Quelle forme voulez vous parmis: rectangle, ellipse, cercle, segment, polygone: ")
-    print("Rentrez les coordonnées comme ceci: x,y.")
-    if forme == 'rectangle':
-        a = input('1er Point: ').split(","); a = (int(a[0]),int(a[1]))
-        b = input('2e Point: ').split(","); b= (int(b[0]),int(b[1]))
-        c = input('Couleur: ')
-        rectangle(Fichier,a,b,c)
-        return main(Fichier)
-
-
-    elif forme == 'cercle': 
-        a = input('Point de centre: ').split(","); a = (int(a[0]),int(a[1]))
-        b = int(input('Rayon: '))
-        c = input('Couleur: ')
-        cercle(Fichier,a,b,c)
-        return main(Fichier)
-
-
-    elif forme == 'segment' :
-        a = input('1er Point: ').split(","); a = (int(a[0]),int(a[1]))
-        b = input('2e Point: ').split(","); b = (int(b[0]),int(b[1]))
-        l = int(input("Largeur du segment (valeur de défaut = 1): "))
-        c = input('Couleur: ')
-        segment(Fichier,a,b,c,l)
-        return main(Fichier)
-
-    
-    elif forme == 'polygone' : 
-        nb = int(input("Nombre de points du polygone: "))
-        a = []
-        for i in range(1,nb+1):
-            temp = (input(f"Coordonnée du Point {i}: ")).split(",")
-            a.append((int(temp[0]),int(temp[1])))
-            print(a)
-        b = input('Couleur: ')
-        polygone(Fichier,a,b)
-        return main(Fichier)
-    
-    elif forme == "ellipse":
-        a = input("Point de centre: ").split(","); a = (int(a[0]),int(a[1]))
-        b = int(input("Rayon vertical: "))
-        c = int(input('Rayon horizontal: '))
-        d = input("Couleur: ")
-        ellipse(Fichier,a,b,c,d)
-        return main(Fichier)
-    
-    elif forme == "":
-        return None
-    else:
-        print("La forme n'est pas reconnue!")
-        return main(Fichier)
-
-Fichier = createfile(1024,1024)
+taillex = int(input("Taille x de l'image: "));tailley = int(input("Taille y de l'image: "))
+Fichier = createfile(taillex,tailley)
 
 main(Fichier)
-
 
 
 with open('Formes\output.ppm', 'w') as f:
