@@ -17,7 +17,33 @@ def cercle(fichier, coords: tuple, rayon: float, color: str):
                 if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
                     fichier[i][j] = color
 
-
+"""def demi_cercle(fichier, centre: tuple, rayon, direction, color):
+    x, y = centre
+    if direction == "bas":
+        for i in range(x, x + rayon):
+            for j in range(y - rayon, y + rayon):
+                if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
+                    if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
+                        fichier[i][j] = color
+    elif direction == "gauche":
+        for i in range(x-rayon, x + rayon):
+            for j in range(y - rayon, y):
+                if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
+                    if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
+                        fichier[i][j] = color
+    elif direction == "haut":
+        for i in range(x, x - rayon):
+            for j in range(y - rayon, y + rayon):
+                if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
+                    if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
+                        fichier[i][j] = color
+    elif direction == "droite":
+        for i in range(x-rayon, x + rayon):
+            for j in range(y, y + rayon):
+                if 0 <= i < len(fichier[5]) and 0 <= j < len(fichier[5]):
+                    if (x - i) ** 2 + (y - j) ** 2 <= rayon**2:
+                        fichier[i][j] = color"""
+    
 
 def rectangle(fichier,point1,point2,color):
     """

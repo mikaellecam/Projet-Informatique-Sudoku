@@ -17,6 +17,7 @@ cercle(Fichier,(500,500),300,"rouge")
 cercle(Fichier,(900,900),200,"magenta")
 cercle(Fichier,(200,300),100,"cyan")
 """
+
 ###Ellipse###
 """
 ellipse(Fichier,(250,250),200,100,"jaune")
