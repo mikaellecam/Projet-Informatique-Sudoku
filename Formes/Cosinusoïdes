@@ -1,0 +1,19 @@
+import numpy as np
+def cosinusoide(fichier, longueur, direction, coefficient, point_x0_y, couleur):#coefficient*cos(x)+point_x0
+    x0,y0 = point_x0_y
+    x= np.linspace(x0-longueur//2,x0+longueur//2, int(fichier[1][0])*len(str(coefficient**2)))
+    cos= coefficient*np.cos((coefficient/(10**len(str(coefficient))))*x)+y0
+    if direction=="vertical":
+        for i in range(len(x)):
+            if 0<=x[i]<int(fichier[1][0]) and 0<=cos[i]<int(fichier[2][0]):
+                for k in [-2,-1,0,1,2]:
+                    x2=cos[i]+k+4
+                    y2=x[i]
+                    fichier[int(y2)][int(x2)]= couleur
+    elif direction=="horizontal":
+        for i in range(len(x)):
+            if 0<=x[i]<int(fichier[1][0]) and 0<=cos[i]<int(fichier[2][0]):
+                for k in [-2,-1,0,1,2]:
+                    y2=cos[i]+k+4
+                    x2=x[i]
+                    fichier[int(y2)][int(x2)]= couleur
